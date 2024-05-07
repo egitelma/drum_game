@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
 		//this.load.image("playerFistL",   "assets/playerFistL.png");
 		//this.load.image("playerFistR",   "assets/playerFistR.png");
 		//this.load.image("enemy",         "assets/enemy.png");
+		//this.load.image("drum",          "assets/drum.png);
 		//this.load.image("inputL",        "assets/inputL.png");
 		//this.load.image("inputR",        "assets/inputR.png");
 		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
@@ -20,6 +21,7 @@ class Play extends Phaser.Scene {
 		this.playerHealth = 100;
 		this.enemyHealth = 100;
 		this.gameOver = false;
+		this.inputLockedOut = false;
 
 		//Health UI - two rectangles, on top left and top right, both red
 		this.add.rectangle(0, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
@@ -61,25 +63,22 @@ class Play extends Phaser.Scene {
 			this.timeRemainingText.setText("Time: " + this.timeRemaining);
 			//change health bar size based on health
 
-			//Input Handling
-			if (Phaser.Input.Keyboard.JustDown(keyLEFTPUNCH)) {
-				//Player Left Punch
-
-				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-			}else if (Phaser.Input.Keyboard.JustDown(keyRIGHTPUNCH)) {
-				//Player Right Punch
-
-				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-			}else if (Phaser.Input.Keyboard.JustDown(keyLEFTDODGE)) {
-				//Player Left Dodge
-
-				//handle left dodge movement
-			}else if (Phaser.Input.Keyboard.JustDown(keyRIGHTDODGE)) {
-				//Player Right Dodge
-
+			//Dodging
+			if (Phaser.Input.Keyboard.JustDown(keyRIGHTDODGE) && !inputLockedOut) { //Player Right Dodge
 				//handle right dodge movement
 			}
+			if (Phaser.Input.Keyboard.JustDown(keyLEFTDODGE) && !inputLockedOut) { //Player Left Dodge
+				//handle left dodge movement
+			}
 
+			//Punching
+			if (Phaser.Input.Keyboard.JustDown(keyRIGHTPUNCH) && !inputLockedOut) { //Player Right Punch
+				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
+			}
+			if (Phaser.Input.Keyboard.JustDown(keyLEFTPUNCH) && !inputLockedOut) { //Player Left Punch
+				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
+			}
+			
 			//Enemy AI
 			//Add here - done with a prefab and a set of states for the enemy to be in
 
