@@ -5,7 +5,7 @@ let config = {
     render: {
         pixelArt: true
     },
-    scene: [Load, Menu, Play, End],
+    scene: [Menu, Play], //add load and end
     backgroundColor: "#FFFFFF",
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH

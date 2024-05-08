@@ -66,6 +66,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         //punching code 
             //I think this will spawn a different enemy type at the enemies location
             //and the collision checker in the main menu will handle the "punched" effects
+        console.log("punched")
         setTimeout(() => {
             this.punchCooldown = false
         }, 2000)
