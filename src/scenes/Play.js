@@ -37,11 +37,11 @@ class Play extends Phaser.Scene {
 
 		//Input Display - Stretch Goal
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
-		this.drum = this.add.image(100, 400, "inputDrum").setOrigin(0, 0);
-		this.inputPunchL = this.add.image(113, 408, "inputPunchL").setOrigin(0, 0).setVisible(false);
-		this.inputPunchR = this.add.image(168, 409, "inputPunchR").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeL = this.add.image(98, 394, "inputDodgeL").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeR = this.add.image(169, 394, "inputDodgeR").setOrigin(0, 0).setVisible(false);
+		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(548, 419, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(619, 419, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
         this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
