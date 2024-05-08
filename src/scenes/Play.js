@@ -1,6 +1,6 @@
 class Play extends Phaser.Scene {
 	constructor() {
-		super("Play");
+		super("playScene");
 	}
 
 	preload() {
@@ -13,6 +13,12 @@ class Play extends Phaser.Scene {
 		//this.load.image("inputR",        "assets/inputR.png");
 		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
 		//this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
+        this.load.spritesheet("Little Mac", "./assets/Little_Mac.png", {
+            frameWidth: 243,
+            frameHeight: 410,
+            startFrame: 0,
+            endFrame: 0
+        })
 	}
 
 	create() {
@@ -28,7 +34,11 @@ class Play extends Phaser.Scene {
 		this.add.rectangle(700, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
 
 		//Time UI - top center, white
-		this.timeRemainingText = this.add.text(400, 0, "Time: " + timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#FFFFFF" }).setOrigin(0.5, 0);
+		this.timeRemainingText = this.add.text(400, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#FFFFFF" }).setOrigin(0.5, 0);
+
+        //enemy
+
+        this.LittleMac = new Enemy(this, game.config.width/2 + 400, 800, "Little Mac", 0, 1)
 
 		//Player Left Fist
 		//this.add.image(100, 300, "playerFistL").setOrigin(0, 0);
@@ -46,10 +56,10 @@ class Play extends Phaser.Scene {
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
 
 		//Inputs
-        keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        keyRIGHTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
-        keyLEFTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-		keyRIGHTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyRIGHTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+        this.keyLEFTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+		this.keyRIGHTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 	}
 
 	update() {
@@ -64,26 +74,26 @@ class Play extends Phaser.Scene {
 			//change health bar size based on health
 
 			//Dodging
-			if (Phaser.Input.Keyboard.JustDown(keyRIGHTDODGE) && !inputLockedOut) { //Player Right Dodge
+			if (Phaser.Input.Keyboard.JustDown(this.keyRIGHTDODGE) && !inputLockedOut) { //Player Right Dodge
 				//handle right dodge movement
 			}
-			if (Phaser.Input.Keyboard.JustDown(keyLEFTDODGE) && !inputLockedOut) { //Player Left Dodge
+			if (Phaser.Input.Keyboard.JustDown(this.keyLEFTDODGE) && !inputLockedOut) { //Player Left Dodge
 				//handle left dodge movement
 			}
 
 			//Punching
-			if (Phaser.Input.Keyboard.JustDown(keyRIGHTPUNCH) && !inputLockedOut) { //Player Right Punch
+			if (Phaser.Input.Keyboard.JustDown(this.keyRIGHTPUNCH) && !inputLockedOut) { //Player Right Punch
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
 			}
-			if (Phaser.Input.Keyboard.JustDown(keyLEFTPUNCH) && !inputLockedOut) { //Player Left Punch
+			if (Phaser.Input.Keyboard.JustDown(this.keyLEFTPUNCH) && !inputLockedOut) { //Player Left Punch
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
 			}
 			
 			//Enemy AI
 			//Add here - done with a prefab and a set of states for the enemy to be in
-
+            this.LittleMac.update()
 			//Handle whether player or enemy takes damage
-			//Add here - use a set of rectangle hitboxes to ddetermine whether the player is in range of the attack or not
+			//Add here - use a set of rectangle hitboxes to determine whether the player is in range of the attack or not
 
 			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates
 			this.timeRemaining -= 1 / this.game.loop.actualFps;

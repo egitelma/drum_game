@@ -21,12 +21,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     //enemy AI - runs every frame
     update() {
         //level one
+        console.log("enemy x: ", this.x)
         if(this.level = 1) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
-                this.move(-25)
+                this.move(-100)
+                console.log("Moving Right")
             }
             else if(this.x < this.playerHitbox - this.playerHitboxWidth && !this.windup) {
-                this.move(25)
+                this.move(100)
+                console.log("Moving Left")
             } 
             else if(!this.windup && !this.punchCooldown) {
                 this.stop()
@@ -35,6 +38,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                     this.punch()
                     this.windup = false
                 }, 1000)
+                console.log("Winding up")
             } else {
                 this.stop()
             }
@@ -52,12 +56,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     //shift left and right
     move(speed) { //speed - from 1 to 100 - moves the body either left or right based on positive/negative
-        this.body.setVelocity(speed)
+        this.body.setVelocityX(speed)
     }
 
     //stop moving
     stop() {
-        this.body.setVelocity(0)
+        this.body.setVelocityX(0)
     }
 
     //punch the player
