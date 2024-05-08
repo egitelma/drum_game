@@ -4,7 +4,7 @@ class Play extends Phaser.Scene {
 	}
 
 	preload() {
-		//this.load.image("background",    "assets/background.png");
+		this.load.image("background", "./assets/boxing-ring.jpg");
 		//this.load.image("playerFistL",   "assets/playerFistL.png");
 		//this.load.image("playerFistR",   "assets/playerFistR.png");
 		//this.load.image("enemy",         "assets/enemy.png");
@@ -22,6 +22,7 @@ class Play extends Phaser.Scene {
 	}
 
 	create() {
+        this.add.image(0, 0, "background").setOrigin(0).setScale(2)
 		//variables
 		this.timeRemaining = 60;
 		this.playerHealth = 100;
@@ -38,7 +39,7 @@ class Play extends Phaser.Scene {
 
         //enemy
 
-        this.LittleMac = new Enemy(this, game.config.width/2 + 400, 800, "Little Mac", 0, 1)
+        this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 1).setScale(.8)
 
 		//Player Left Fist
 		//this.add.image(100, 300, "playerFistL").setOrigin(0, 0);
