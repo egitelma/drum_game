@@ -1,6 +1,6 @@
 class Play extends Phaser.Scene {
 	constructor() {
-		super("Play");
+		super("playScene");
 	}
 
 	preload() {
@@ -8,11 +8,11 @@ class Play extends Phaser.Scene {
 		//this.load.image("playerFistL",   "assets/playerFistL.png");
 		//this.load.image("playerFistR",   "assets/playerFistR.png");
 		//this.load.image("enemy",         "assets/enemy.png");
-		//this.load.image("drum",          "assets/drum.png);
-		//this.load.image("inputL",        "assets/inputL.png");
-		//this.load.image("inputR",        "assets/inputR.png");
-		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
-		//this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
+		this.load.image("inputDrum",          "assets/inputDrum.png");
+		this.load.image("inputPunchL",        "assets/inputPunchL.png");
+		this.load.image("inputPunchR",        "assets/inputPunchR.png");
+		this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
+		this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
 	}
 
 	create() {
@@ -24,11 +24,11 @@ class Play extends Phaser.Scene {
 		this.inputLockedOut = false;
 
 		//Health UI - two rectangles, on top left and top right, both red
-		this.add.rectangle(0, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
-		this.add.rectangle(700, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
+		//this.add.rectangle(0, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
+		//this.add.rectangle(700, 0, 100, 20, 0xFF0000).setOrigin(0, 0);
 
 		//Time UI - top center, white
-		this.timeRemainingText = this.add.text(400, 0, "Time: " + timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#FFFFFF" }).setOrigin(0.5, 0);
+		//this.timeRemainingText = this.add.text(400, 0, "Time: " + timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#FFFFFF" }).setOrigin(0.5, 0);
 
 		//Player Left Fist
 		//this.add.image(100, 300, "playerFistL").setOrigin(0, 0);
@@ -44,39 +44,56 @@ class Play extends Phaser.Scene {
 
 		//Input Display - Stretch Goal
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
+		this.drum = this.add.image(100, 400, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(113, 408, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(168, 409, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(98, 394, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(169, 394, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
-        keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        keyRIGHTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
-        keyLEFTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-		keyRIGHTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyRIGHTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+        this.keyLEFTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+		this.keyRIGHTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 	}
 
 	update() {
 		if (!this.gameOver) {
 			//Handling end conditions
-			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
-				this.gameOver = true;
-			}
+			// if (timeRemaining <= 0 || playerHealth <= 0 || enemyHealth <= 0) {
+			// 	gameOver = true;
+			// }
 
 			//Update UI
-			this.timeRemainingText.setText("Time: " + this.timeRemaining);
+			//this.timeRemainingText.setText("Time: " + this.timeRemaining);
 			//change health bar size based on health
 
 			//Dodging
-			if (Phaser.Input.Keyboard.JustDown(keyRIGHTDODGE) && !inputLockedOut) { //Player Right Dodge
+			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
 				//handle right dodge movement
+				this.inputDodgeR.setVisible(true);
+			} else {
+				this.inputDodgeR.setVisible(false);
 			}
-			if (Phaser.Input.Keyboard.JustDown(keyLEFTDODGE) && !inputLockedOut) { //Player Left Dodge
+			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
 				//handle left dodge movement
+				this.inputDodgeL.setVisible(true);
+			} else {
+				this.inputDodgeL.setVisible(false);
 			}
 
 			//Punching
-			if (Phaser.Input.Keyboard.JustDown(keyRIGHTPUNCH) && !inputLockedOut) { //Player Right Punch
+			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
+				this.inputPunchR.setVisible(true);
+			} else {
+				this.inputPunchR.setVisible(false);
 			}
-			if (Phaser.Input.Keyboard.JustDown(keyLEFTPUNCH) && !inputLockedOut) { //Player Left Punch
+			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
+				this.inputPunchL.setVisible(true);
+			} else {
+				this.inputPunchL.setVisible(false);
 			}
 			
 			//Enemy AI
@@ -86,7 +103,7 @@ class Play extends Phaser.Scene {
 			//Add here - use a set of rectangle hitboxes to ddetermine whether the player is in range of the attack or not
 
 			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates
-			this.timeRemaining -= 1 / this.game.loop.actualFps;
+			//this.timeRemaining -= 1 / this.game.loop.actualFps;
 		} else {
 			this.gameEnd();
 		}
