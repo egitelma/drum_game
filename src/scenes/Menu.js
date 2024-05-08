@@ -1,34 +1,54 @@
-class Menu extends Phaser.Scene {
+class Menu extends Phaser.Scene{
     constructor() {
-        super('menuScene')
+        super("menuScene");
     }
 
-    preload() {
-        this.load.bitmapFont('dogica_font', 'assets/fonts/dogica.png', 'assets/fonts/dogica.xml')
-        this.load.bitmapFont('dogica_reg_font', 'assets/fonts/dogica_reg.png', 'assets/fonts/dogica_reg.xml')
-    }
+    create(){
+        //create things in the scene
+        let graphics = this.add.graphics();
 
-    create() {
-        const { KeyCodes } = Phaser.Input.Keyboard
-        this.KEYS = this.input.keyboard.addKeys({
-            SPACE: KeyCodes.SPACE
+        //title text
+        let titleText = this.add.text(width/2-320, height/4, "drum punch game", {
+            fontFamily: "Arial",
+            fontSize: "64px",
+            color: "#000000",
+            align: "center"
         })
 
-        // add title text
-        let t1 = this.add.bitmapText(game.config.width / 2, (game.config.height / 2) - 32, 'dogica_font', 'BOXING GAME', 20).setOrigin(0.5).setAlpha(0)
-        let t2 = this.add.bitmapText(game.config.width / 2, game.config.height / 2, 'dogica_font', 'Press SPACE to start', 15).setOrigin(0.5).setAlpha(0)
+        //text that changes with level select on/off
+        //"play" button
+        let playBox = this.add.rectangle(width/2, height/4*3, width/3, height/6, 0x307a44);
+        let playText = this.add.text(width/2-64, height/4*3-30, "PLAY", {
+            fontFamily: "Arial",
+            fontSize: "48px",
+            color: "#FFFFFF",
+            align: "center"
+        });
+        //level select things
+        let lsText = this.add.text(width/2-240, height/2, "level select", {
+            fontFamily: "Arial",
+            fontSize: "32px",
+            color: "#000000",
+            align: "center"
+        })
+        let lvlOneBox = this.add.rectangle(width/2, height/8*5, width/8, height/10, 0x307a44);
+        lsText.visible = false;
 
+        //interactivity
+        playBox.setInteractive({
+            hitArea: playBox,
+            useHandCursor: true
+        });
+        playBox.on("pointerdown", () => {
+            //open level select
+            this.scene.start("playScene");
+        })
     }
 
-    update() {
-        if(Phaser.Input.Keyboard.JustDown(this.KEYS.SPACE)){
-            // if(loaded == false) {
-            //     this.scene.start('loadScene')
-            //     loaded = true
-            // } else {
-            //     this.scene.start('playScene')
-            // }
-            this.scene.start('playScene')
-        }
+    openLevelSelect(){
+        playBox.visible = false;
+        playText.visible = false;
+        
+
     }
 }

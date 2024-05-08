@@ -1,7 +1,7 @@
 let config = {
     type: Phaser.WEBGL,
     width: 1280,
-    height: 1280,
+    height: 640,
     render: {
         pixelArt: true
     },
@@ -15,3 +15,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 let { width, height } = game.config;
+
+let gameWon = false;
+
+let enemyList = [];
