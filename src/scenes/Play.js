@@ -20,7 +20,7 @@ class Play extends Phaser.Scene {
 		this.add.rectangle(width-400, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
 		//Time UI - top center, white
-		this.timeRemainingText = this.add.text(width/2-64, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#FFFFFF" }).setOrigin(0.5, 0);
+		this.timeRemainingText = this.add.text(width/2-64, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
 
 		//Player Left Fist
 		this.leftFist = this.add.image(0, 300, "fistLeft").setOrigin(0, 0);
@@ -37,11 +37,11 @@ class Play extends Phaser.Scene {
 
 		//Input Display - Stretch Goal
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
-		this.drum = this.add.image(100, 400, "inputDrum").setOrigin(0, 0);
-		this.inputPunchL = this.add.image(113, 408, "inputPunchL").setOrigin(0, 0).setVisible(false);
-		this.inputPunchR = this.add.image(168, 409, "inputPunchR").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeL = this.add.image(98, 394, "inputDodgeL").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeR = this.add.image(169, 394, "inputDodgeR").setOrigin(0, 0).setVisible(false);
+		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(548, 419, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(619, 419, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
         this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -53,12 +53,12 @@ class Play extends Phaser.Scene {
 	update() {
 		if (!this.gameOver) {
 			//Handling end conditions
-			// if (timeRemaining <= 0 || playerHealth <= 0 || enemyHealth <= 0) {
-			// 	gameOver = true;
-			// }
+			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
+				this.gameOver = true;
+			}
 
 			//Update UI
-			//this.timeRemainingText.setText("Time: " + this.timeRemaining);
+			this.timeRemainingText.setText("Time: " + Math.round(this.timeRemaining));
 			//change health bar size based on health
 
 			//Dodging
@@ -148,8 +148,8 @@ class Play extends Phaser.Scene {
 			//Handle whether player or enemy takes damage
 			//Add here - use a set of rectangle hitboxes to ddetermine whether the player is in range of the attack or not
 
-			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates
-			//this.timeRemaining -= 1 / this.game.loop.actualFps;
+			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates, round to whole number
+			this.timeRemaining -= 1 / this.game.loop.actualFps;
 		} else {
 			this.gameEnd();
 		}
