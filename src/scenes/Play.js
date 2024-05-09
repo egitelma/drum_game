@@ -25,8 +25,8 @@ class Play extends Phaser.Scene {
 		//Player Left Fist
 		this.leftFist = this.add.image(0, 300, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
-		//Player Right Fist (img dimensions: 1632x1224 so 0.25x the width is 408)
-		this.rightFist = this.add.image(width-408, 300, "fistRight").setOrigin(0, 0);
+		//Player Right Fist (img dimensions: 1632x1224)
+		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
         this.rightFist.setScale(0.25);
 
 		//Enemy - middle slightly above center
@@ -78,18 +78,32 @@ class Play extends Phaser.Scene {
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-                console.log("right punch");
                 this.tweens.add({
-                    targets: this.fistLeft,
+                    targets: this.rightFist,
                     ease: "Bounce.easeIn",
                     paused: true,
-                    yoyo: false,
+                    yoyo: true,
                     angle: {
                         from: 0,
-                        to: -45,
+                        to: 45,
+                        duration: 500
+                    },
+                    x: {
+                        from: this.rightFist.x,
+                        to: this.rightFist.x-320,
                         duration: 500
                     }
                 }).play();
+                //cooldown
+                this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                        console.log("unfix input");
+                    },
+                    loop: false
+                })
 				this.inputPunchR.setVisible(true);
 			} else {
 				this.inputPunchR.setVisible(false);
@@ -97,18 +111,32 @@ class Play extends Phaser.Scene {
             
 			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-                console.log("left punch");
                 this.tweens.add({
-                    targets: this.fistRight,
+                    targets: this.leftFist,
                     ease: "Bounce.easeIn",
                     paused: true,
-                    yoyo: false,
+                    yoyo: true,
                     angle: {
                         from: 0,
-                        to: 45,
+                        to: -45,
+                        duration: 500
+                    },
+                    x: {
+                        from: this.leftFist.x,
+                        to: this.leftFist.x+320,
                         duration: 500
                     }
                 }).play();
+                //cooldown
+                this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                        console.log("unfix input");
+                    },
+                    loop: false
+                })
 				this.inputPunchL.setVisible(true);
 			} else {
 				this.inputPunchL.setVisible(false);
