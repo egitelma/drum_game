@@ -14,6 +14,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.punchCooldown = false  //can it punch?
         this.windup = false         //is it punching?
         this.hitBox = scene.physics.add.image(game.config.width/2, game.config.height/2, "hitbox").setActive(false)
+        this.hitBox.setImmovable(true)
         //this.hitBox.setScale(2)
         scene.hitBoxGroup.add(this.hitBox)
         this.scene = scene
