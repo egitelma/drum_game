@@ -57,28 +57,28 @@ class Play extends Phaser.Scene {
 
 		//Health UI - two rectangles, on top left and top right, both red
 		this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.add.rectangle(width-400, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
    		this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
-		//Time UI - top center, black
-		this.timeRemainingText = this.add.text(width/2-64, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
+		//Time UI - top center, white
+		this.timeRemainingText = this.add.text(width/2 - 20, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
 
 		//Player Left Fist
-		this.leftFist = this.add.image(0, 300, "fistLeft").setOrigin(0, 0);
+		this.leftFist = this.add.image(0, 340, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
 		//Player Right Fist (img dimensions: 1632x1224)
-		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
+		this.rightFist = this.add.image(width - 30, 340, "fistRight").setOrigin(1, 0);
 		this.rightFist.setScale(0.25);
 
 		//Input Display
 		//use taiko no tatsujin drum icons, switch between white and red/blue for input off and on
-		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
-		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
-		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeL = this.add.image(548, 419, "inputDodgeL").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeR = this.add.image(619, 419, "inputDodgeR").setOrigin(0, 0).setVisible(false);
+		this.drum = this.add.image(550, 455, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(563, 463, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(618, 464, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(548, 449, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(619, 449, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
         this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -194,6 +194,6 @@ class Play extends Phaser.Scene {
 	}
 
 	gameEnd(){
-		this.scene.start("End");
+		this.scene.start("endScene");
 	}
 }
