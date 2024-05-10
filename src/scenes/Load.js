@@ -31,7 +31,7 @@ class Load extends Phaser.Scene {
         this.load.image("fistRight", "fist_right.png");
         //this.load.image("background",    "background.png");
 		//this.load.image("enemy",         "enemy.png");
-		this.load.image("inputDrum", "drum.png");
+		this.load.image("inputDrum",   "inputDrum.png");
 		this.load.image("inputPunchL", "inputPunchL.png");
 		this.load.image("inputPunchR", "inputPunchR.png");
 		this.load.image("inputDodgeL", "inputDodgeL.png");
