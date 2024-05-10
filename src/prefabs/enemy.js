@@ -26,8 +26,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     //enemy AI - runs every frame
     update() {
         //level one
-        console.log("enemy x: ", this.x)
-        console.log("enemy level: ", this.level)
+        // console.log("enemy x: ", this.x)
+        // console.log("enemy level: ", this.level)
         if(this.level == 1) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-100)

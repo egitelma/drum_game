@@ -15,7 +15,7 @@ class Play extends Phaser.Scene {
 
 	create() {
 		//Background
-		this.add.image(0, 0, "background").setOrigin(0).setScale(2)
+		this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
 
 		//Animations
 		this.anims.create({
@@ -60,17 +60,26 @@ class Play extends Phaser.Scene {
 		this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
-   		this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
+   		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
 		//Time UI - top center, white
-		this.timeRemainingText = this.add.text(width/2 - 20, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
+		// this.timeRemainingText = this.add.text(width/2 - 20, 0, "Time: " + this.timeRemaining, {
+        //     fontFamily: "blockFont", 
+        //     fontSize: "20px", 
+        //     color: "#000000" 
+        // }).setOrigin(0.5, 0);
+        this.timeRemainingText = this.add.bitmapText(width/2-20, 32, "blockFont", "TIME: " + this.timeRemaining, 20, 1).setOrigin(0.5, 0);
 
 		//Player Left Fist
 		this.leftFist = this.add.image(0, 340, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
 		//Player Right Fist (img dimensions: 1632x1224)
-		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
+		this.rightFist = this.add.image(width, 340, "fistRight").setOrigin(1, 0);
         this.rightFist.setScale(0.25);
+        //Gun, Left (off screen)
+        this.leftGun = this.add.image(0, height, "gunRight").setOrigin(0, 0);
+        this.leftGun.flipX = true;
+        this.leftGun.setScale(0.3);
         //Gun, Right (off screen)
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
         this.rightGun.setScale(0.3);
@@ -159,11 +168,25 @@ class Play extends Phaser.Scene {
             }
             else if(this.gunComboLeft.matched){
                 //Shoot a gun (left hand)
-                this.combo = "gunLeft";
+                this.tweens.add({
+                    targets: this.leftGun,
+                    ease: "Quadratic.easeIn",
+                    paused: true,
+                    yoyo: true,
+                    x: {
+                        from: this.leftGun.x,
+                        to: this.leftGun.x+320,
+                        duration: 1000
+                    },
+                    y: {
+                        from: height,
+                        to: height-320,
+                        duration: 1000
+                    }
+                }).play();
             }
             else if(this.gunComboRight.matched){
                 //Shoot a gun (right hand)
-                //gun right
                 this.tweens.add({
                     targets: this.rightGun,
                     ease: "Quadratic.In",
@@ -192,7 +215,7 @@ class Play extends Phaser.Scene {
 			}
 
 			//Update UI
-			this.timeRemainingText.setText("Time: " + Math.round(this.timeRemaining));
+			this.timeRemainingText.setText("TIME: " + Math.round(this.timeRemaining));
 			//change health bar size based on health
 
 			//Dodging
