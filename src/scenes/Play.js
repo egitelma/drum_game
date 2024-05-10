@@ -14,6 +14,10 @@ class Play extends Phaser.Scene {
 	}
 
 	create() {
+		//Background
+		this.add.image(0, 0, "background").setOrigin(0).setScale(2)
+
+		//Animations
 		this.anims.create({
 			key: "idle",
 			repeat: -1,
@@ -44,7 +48,6 @@ class Play extends Phaser.Scene {
 			})
 		})
 
-        this.add.image(0, 0, "background").setOrigin(0).setScale(2)
 		//variables
 		this.timeRemaining = 60;
 		this.playerHealth = 100;
@@ -56,32 +59,21 @@ class Play extends Phaser.Scene {
 		this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 		this.add.rectangle(width-400, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
-		//Time UI - top center, white
+    	//enemy
+   		this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
-     //enemy
-
-    this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
-
-		//collision
-
+		//Time UI - top center, black
 		this.timeRemainingText = this.add.text(width/2-64, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
-
 
 		//Player Left Fist
 		this.leftFist = this.add.image(0, 300, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
 		//Player Right Fist (img dimensions: 1632x1224)
 		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
-        this.rightFist.setScale(0.25);
+		this.rightFist.setScale(0.25);
 
-		//Enemy - middle slightly above center
-		//this.add.image(400, 200, "enemy").setOrigin(0, 0);
-
-		//Background
-		//this.add.image(400, 200, "background").setOrigin(0, 0);
-
-		//Input Display - Stretch Goal
-		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
+		//Input Display
+		//use taiko no tatsujin drum icons, switch between white and red/blue for input off and on
 		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
 		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
 		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
