@@ -77,11 +77,11 @@ class Play extends Phaser.Scene {
 
 		//Input Display
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
-		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
-		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
-		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeL = this.add.image(548, 419, "inputDodgeL").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeR = this.add.image(619, 419, "inputDodgeR").setOrigin(0, 0).setVisible(false);
+		this.drum = this.add.image(550, 455, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(563, 463, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(618, 464, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(548, 449, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(619, 449, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
         this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -207,12 +207,28 @@ class Play extends Phaser.Scene {
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
 				//handle right dodge movement
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
 				this.inputDodgeR.setVisible(true);
 			} else {
 				this.inputDodgeR.setVisible(false);
       }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
 				//handle left dodge movement
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
 				this.inputDodgeL.setVisible(true);
 			} else {
 				this.inputDodgeL.setVisible(false);
