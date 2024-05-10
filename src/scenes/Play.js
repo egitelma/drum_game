@@ -56,8 +56,8 @@ class Play extends Phaser.Scene {
 		this.inputLockedOut = false;
 
 		//Health UI - two rectangles, on top left and top right, both red
-		this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.enemyHealthBar = this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
    		this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
@@ -74,12 +74,6 @@ class Play extends Phaser.Scene {
         //Gun, Right (off screen)
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
         this.rightGun.setScale(0.3);
-
-		//Enemy - middle slightly above center
-		//this.add.image(400, 200, "enemy").setOrigin(0, 0);
-
-		//Background
-		//this.add.image(400, 200, "background").setOrigin(0, 0);
 
 		//Input Display
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
@@ -189,11 +183,26 @@ class Play extends Phaser.Scene {
 			//Handling end conditions
 			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
 				this.gameOver = true;
+				if(this.playerHealth <= 0){
+					gameWon = false;
+				}
+				else {
+					if(this.playerHealth > this.enemyHealth){
+						gameWon = true;
+					}
+					else {
+						gameWon = false;
+					}
+				}
 			}
 
 			//Update UI
 			this.timeRemainingText.setText("Time: " + Math.round(this.timeRemaining));
-			//change health bar size based on health
+			//change health bar size based on health, shrink from the left side going towards the edge of the screen
+			this.playerHealthBar.setSize(this.playerHealth * 4, 20);
+			this.enemyHealthBar.setSize(this.enemyHealth * 4, 20);
+			//move enemy health bar to accomodate for the new size
+			this.enemyHealthBar.x = width - this.enemyHealthBar.width - 30;
 
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
