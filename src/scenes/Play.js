@@ -28,6 +28,9 @@ class Play extends Phaser.Scene {
 		//Player Right Fist (img dimensions: 1632x1224)
 		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
         this.rightFist.setScale(0.25);
+        //Gun, Right (off screen)
+        this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
+        this.rightGun.setScale(0.3);
 
 		//Enemy - middle slightly above center
 		//this.add.image(400, 200, "enemy").setOrigin(0, 0);
@@ -35,7 +38,7 @@ class Play extends Phaser.Scene {
 		//Background
 		//this.add.image(400, 200, "background").setOrigin(0, 0);
 
-		//Input Display - Stretch Goal
+		//Input Display
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
 		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
 		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
@@ -48,6 +51,94 @@ class Play extends Phaser.Scene {
         this.keyRIGHTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
         this.keyLEFTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 		this.keyRIGHTDODGE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
+        //Combos
+        //  Key combos
+        //      Left punch, right punch, left punch: Toss improvised explosive (left hand)
+        let explosiveCombo = [this.keyLEFTPUNCH, this.keyRIGHTPUNCH, this.keyLEFTPUNCH];
+        //      Right punch, left punch, right punch: Rocket punch (right hand)
+        let rocketCombo = [this.keyRIGHTPUNCH, this.keyLEFTPUNCH, this.keyRIGHTPUNCH];
+        //      Dodge left, dodge right, punch (either hand): Gun
+        let gunComboLeft = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyLEFTPUNCH];
+        let gunComboRight = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyRIGHTPUNCH];
+        //  Explosive combo
+        //      Combo objects
+        this.explosiveCombo = this.input.keyboard.createCombo(explosiveCombo, {
+            resetOnWrongKey: true,
+            resetOnMatch: true,
+            maxKeyDelay: 200,
+            deleteOnMatch: false
+        });
+        this.rocketCombo = this.input.keyboard.createCombo(rocketCombo, {
+            resetOnWrongKey: true,
+            resetOnMatch: true,
+            maxKeyDelay: 200,
+            deleteOnMatch: false
+        });
+        this.gunComboLeft = this.input.keyboard.createCombo(gunComboLeft, {
+            resetOnWrongKey: true,
+            resetOnMatch: true,
+            maxKeyDelay: 200,
+            deleteOnMatch: false
+        });
+        this.gunComboRight = this.input.keyboard.createCombo(gunComboRight, {
+            resetOnWrongKey: true,
+            resetOnMatch: true,
+            maxKeyDelay: 200,
+            deleteOnMatch: false
+        });
+        //      Combo event
+        this.input.keyboard.on('keycombomatch', (event) => {
+            //Stuff to run for every combo
+            //make everything invisible
+            this.drum.setVisible(false);
+            this.leftFist.setVisible(false);
+            this.rightFist.setVisible(false);
+            this.inputLockedOut = true;
+            //make everything visible again after 2s
+            this.time.addEvent({
+                delay: 2000,
+                callback: () => {
+                    this.drum.setVisible(true);
+                    this.leftFist.setVisible(true);
+                    this.rightFist.setVisible(true);
+                    this.inputLockedOut = false;
+                }
+            });
+
+            if(this.explosiveCombo.matched){
+                //Launch improvised explosive
+                this.combo = "explosive";
+            }
+            else if(this.rocketCombo.matched){
+                //Launch rocket punch
+                this.combo = "rocket";
+            }
+            else if(this.gunComboLeft.matched){
+                //Shoot a gun (left hand)
+                this.combo = "gunLeft";
+            }
+            else if(this.gunComboRight.matched){
+                //Shoot a gun (right hand)
+                //gun right
+                this.tweens.add({
+                    targets: this.rightGun,
+                    ease: "Quadratic.In",
+                    paused: true,
+                    yoyo: true,
+                    x: {
+                        from: this.rightGun.x,
+                        to: this.rightGun.x-320,
+                        duration: 1000
+                    },
+                    y: {
+                        from: height,
+                        to: height-320,
+                        duration: 1000
+                    }
+                }).play();
+            }
+        })
 	}
 
 	update() {
@@ -76,7 +167,8 @@ class Play extends Phaser.Scene {
 			}
 
 			//Punching 
-			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
+			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut && this.combo == "") { //Player Right Punch
+                console.log("punch right");
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -100,16 +192,16 @@ class Play extends Phaser.Scene {
                     delay: 1000, //a little extra time to be safe
                     callback: () => {
                         this.inputLockedOut = false;
-                        console.log("unfix input");
                     },
                     loop: false
                 })
 				this.inputPunchR.setVisible(true);
-			} else {
+			}
+             else {
 				this.inputPunchR.setVisible(false);
 			}
             
-			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
+			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut && this.combo == "") { //Player Left Punch
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.leftFist,
@@ -138,7 +230,8 @@ class Play extends Phaser.Scene {
                     loop: false
                 })
 				this.inputPunchL.setVisible(true);
-			} else {
+			}
+            else {
 				this.inputPunchL.setVisible(false);
 			}
 			
@@ -153,9 +246,9 @@ class Play extends Phaser.Scene {
 		} else {
 			this.gameEnd();
 		}
-	}
+	} //end update
 
 	gameEnd(){
-		this.scene.start("End");
+		this.scene.start("endScene");
 	}
 }

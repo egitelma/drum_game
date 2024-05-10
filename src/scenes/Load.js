@@ -36,6 +36,7 @@ class Load extends Phaser.Scene {
 		this.load.image("inputPunchR", "inputPunchR.png");
 		this.load.image("inputDodgeL", "inputDodgeL.png");
 		this.load.image("inputDodgeR", "inputDodgeR.png");
+        this.load.image("gunRight", "gun_point_right.png");
         //populate the enemy list with enemies (4 enemies to start)
         let numOfEnemies = 4;
         for(let i=0; i<numOfEnemies; i++){
