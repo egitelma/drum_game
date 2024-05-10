@@ -3,6 +3,12 @@ class Play extends Phaser.Scene {
 		super("playScene");
 	}
 
+	init() {
+		this.hitBoxGroup = this.add.group({
+			runChildUpdate: true
+		})
+	}
+
 	preload() {
 		this.load.image("background", "./assets/boxing-ring.jpg");
 		//this.load.image("playerFistL",   "assets/playerFistL.png");
@@ -18,6 +24,13 @@ class Play extends Phaser.Scene {
             frameHeight: 400,
             startFrame: 0,
             endFrame: 2
+        })
+
+		this.load.spritesheet("hitbox", "./assets/hitbox.png", {
+            frameWidth: 60,
+            frameHeight: 60,
+            startFrame: 0,
+            endFrame: 0
         })
 
 		
@@ -73,6 +86,10 @@ class Play extends Phaser.Scene {
         //enemy
 
         this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
+
+		//collision
+
+
 
 		//Player Left Fist
 		//this.add.image(100, 300, "playerFistL").setOrigin(0, 0);

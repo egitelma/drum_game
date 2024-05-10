@@ -3,6 +3,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture, frame)
         scene.add.existing(this)
         scene.physics.add.existing(this)
+
         //physics parameters
         this.body.setCollideWorldBounds(true)
         this.onWorldBounds = true
@@ -12,6 +13,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.level = level
         this.punchCooldown = false  //can it punch?
         this.windup = false         //is it punching?
+        this.hitBox = scene.physics.add.image(game.config.width/2, game.config.height/2, "hitbox").setActive(false)
+        //this.hitBox.setScale(2)
+        scene.hitBoxGroup.add(this.hitBox)
+        this.scene = scene
 
         this.playerHitbox = game.config.width / 2   //the point that the AI drifts towards
         this.playerHitboxWidth = 30                 //the margin within which the AI will punch 
@@ -117,6 +122,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             //and the collision checker in the main menu will handle the "punched" effects
         console.log("punched")
         this.anims.play("punch", true)
+        this.hitBox.setActive(true)
+        setTimeout(() => {
+            this.hitBox.setActive(false)
+        }, 200)
         setTimeout(() => {
             this.punchCooldown = false
         }, cooldown)
