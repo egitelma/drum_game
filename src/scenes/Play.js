@@ -55,6 +55,8 @@ class Play extends Phaser.Scene {
 		this.gameOver = false;
 		this.inputLockedOut = false;
 
+		this.punchFatigue = false
+
 		//Health UI - two rectangles, on top left and top right, both red
 		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 		this.enemyHealthBar = this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
@@ -74,6 +76,44 @@ class Play extends Phaser.Scene {
         //Gun, Right (off screen)
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
         this.rightGun.setScale(0.3);
+
+		//hitbox group
+
+		this.playerHitbox = this.add.group({
+			runChildUpdate: true
+		})
+
+		//punch hitboxes
+		this.hitBoxLeft = this.physics.add.image(game.config.width/2 - 45, game.config.height/2, "hitbox").setActive(false)
+		this.hitBoxRight = this.physics.add.image(game.config.width/2 + 45, game.config.height/2, "hitbox").setActive(false)
+
+		this.hitBoxLeft.setImmovable(true)
+		this.hitBoxRight.setImmovable(true)
+
+		this.playerHitbox.add(this.hitBoxLeft)
+		this.playerHitbox.add(this.hitBoxRight)
+
+		//colliders
+		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
+			console.log("PUNCH LANDED")
+		}, (player, enemy) => {
+			if(player.active == true && !this.punchFatigue) {
+				this.punchFatigue = true
+				return true
+			} else {
+				return false
+			}
+		} )
+		
+		this.physics.add.overlap(this.hitBoxGroup, this.hitBoxLeft, () => {
+			console.log("YEEEOUCH")
+		}, (enemy, player) => {
+			if(enemy.active == true && !this.punchCooldown) {
+				return true
+			} else {
+				return false
+			}
+		})
 
 		//Input Display
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
@@ -268,7 +308,6 @@ class Play extends Phaser.Scene {
 			}
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
-
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -286,6 +325,14 @@ class Play extends Phaser.Scene {
                         duration: 500
                     }
                 }).play();
+				setTimeout(() => {
+					this.hitBoxRight.setActive(true)
+					setTimeout(() => {
+						this.hitBoxRight.setActive(false)
+						this.punchFatigue = false
+					}, 200)
+				}, 500)
+
                 //cooldown
                 this.inputLockedOut = true;
                 this.time.addEvent({
@@ -302,9 +349,8 @@ class Play extends Phaser.Scene {
 			}
             
 			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
-
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-                this.tweens.add({
+				this.tweens.add({
                     targets: this.leftFist,
                     ease: "Bounce.easeIn",
                     paused: true,
@@ -321,6 +367,13 @@ class Play extends Phaser.Scene {
                     }
                 }).play();
                 //cooldown
+				setTimeout(() => {
+					this.hitBoxLeft.setActive(true)
+					setTimeout(() => {
+						this.hitBoxLeft.setActive(false)
+						this.punchFatigue = false
+					}, 200)
+				}, 300)
                 this.inputLockedOut = true;
                 this.time.addEvent({
                     delay: 1000, //a little extra time to be safe
