@@ -12,7 +12,7 @@ let config = {
             //gravity: { y: 1000 }
         }
     },
-    scene: [Menu, Play], //add load and end
+    scene: [Load, Menu, Play, End, LevelSelect],
     backgroundColor: "#FFFFFF",
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -26,3 +26,5 @@ let { width, height } = game.config;
 let gameWon = false;
 
 let enemyList = [];
+
+let enemyLevel = 1;

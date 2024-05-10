@@ -26,6 +26,16 @@ class Load extends Phaser.Scene {
             
         })
         //load assets
+        this.load.path = "./assets/";
+        this.load.image("fistLeft", "fist_left.png");
+        this.load.image("fistRight", "fist_right.png");
+        //this.load.image("background",    "background.png");
+		//this.load.image("enemy",         "enemy.png");
+		this.load.image("inputDrum",   "inputDrum.png");
+		this.load.image("inputPunchL", "inputPunchL.png");
+		this.load.image("inputPunchR", "inputPunchR.png");
+		this.load.image("inputDodgeL", "inputDodgeL.png");
+		this.load.image("inputDodgeR", "inputDodgeR.png");
         //populate the enemy list with enemies (4 enemies to start)
         let numOfEnemies = 4;
         for(let i=0; i<numOfEnemies; i++){
