@@ -3,11 +3,69 @@ class Play extends Phaser.Scene {
 		super("playScene");
 	}
 
+	init() {
+		this.hitBoxGroup = this.add.group({
+			runChildUpdate: true
+		})
+	}
+
 	preload() {
-		
+		this.load.image("background", "./assets/boxing-ring.jpg");
+		//this.load.image("playerFistL",   "assets/playerFistL.png");
+		//this.load.image("playerFistR",   "assets/playerFistR.png");
+		//this.load.image("enemy",         "assets/enemy.png");
+		//this.load.image("drum",          "assets/drum.png);
+		//this.load.image("inputL",        "assets/inputL.png");
+		//this.load.image("inputR",        "assets/inputR.png");
+		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
+		//this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
+    this.load.spritesheet("Little Mac", "./assets/LittleMacSheet.png", {
+            frameWidth: 170,
+            frameHeight: 400,
+            startFrame: 0,
+            endFrame: 2
+        })
+
+		this.load.spritesheet("hitbox", "./assets/hitbox.png", {
+            frameWidth: 60,
+            frameHeight: 60,
+            startFrame: 0,
+            endFrame: 0
+        })
 	}
 
 	create() {
+		this.anims.create({
+			key: "idle",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 0,
+				end: 0
+			})
+		})
+
+		this.anims.create({
+			key: "windup",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 1,
+				end: 1
+			})
+		})
+
+		this.anims.create({
+			key: "punch",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 2,
+				end: 2
+			})
+		})
+
+        this.add.image(0, 0, "background").setOrigin(0).setScale(2)
 		//variables
 		this.timeRemaining = 60;
 		this.playerHealth = 100;
@@ -20,7 +78,15 @@ class Play extends Phaser.Scene {
 		this.add.rectangle(width-400, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
 		//Time UI - top center, white
+
+     //enemy
+
+    this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
+
+		//collision
+
 		this.timeRemainingText = this.add.text(width/2-64, 0, "Time: " + this.timeRemaining, { fontFamily: "Arial", fontSize: "20px", color: "#000000" }).setOrigin(0.5, 0);
+
 
 		//Player Left Fist
 		this.leftFist = this.add.image(0, 300, "fistLeft").setOrigin(0, 0);
@@ -67,16 +133,16 @@ class Play extends Phaser.Scene {
 				this.inputDodgeR.setVisible(true);
 			} else {
 				this.inputDodgeR.setVisible(false);
-			}
+      }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
 				//handle left dodge movement
 				this.inputDodgeL.setVisible(true);
 			} else {
 				this.inputDodgeL.setVisible(false);
 			}
-
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
+
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -110,6 +176,7 @@ class Play extends Phaser.Scene {
 			}
             
 			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
+
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.leftFist,
@@ -144,9 +211,9 @@ class Play extends Phaser.Scene {
 			
 			//Enemy AI
 			//Add here - done with a prefab and a set of states for the enemy to be in
-
+            this.LittleMac.update()
 			//Handle whether player or enemy takes damage
-			//Add here - use a set of rectangle hitboxes to ddetermine whether the player is in range of the attack or not
+			//Add here - use a set of rectangle hitboxes to determine whether the player is in range of the attack or not
 
 			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates, round to whole number
 			this.timeRemaining -= 1 / this.game.loop.actualFps;

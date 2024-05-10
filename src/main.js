@@ -5,6 +5,13 @@ let config = {
     render: {
         pixelArt: true
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true,
+            //gravity: { y: 1000 }
+        }
+    },
     scene: [Load, Menu, Play, End, LevelSelect],
     backgroundColor: "#FFFFFF",
     scale: {
