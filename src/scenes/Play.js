@@ -10,28 +10,7 @@ class Play extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image("background", "./assets/boxing-ring.jpg");
-		//this.load.image("playerFistL",   "assets/playerFistL.png");
-		//this.load.image("playerFistR",   "assets/playerFistR.png");
-		//this.load.image("enemy",         "assets/enemy.png");
-		//this.load.image("drum",          "assets/drum.png);
-		//this.load.image("inputL",        "assets/inputL.png");
-		//this.load.image("inputR",        "assets/inputR.png");
-		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
-		//this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
-    this.load.spritesheet("Little Mac", "./assets/LittleMacSheet.png", {
-            frameWidth: 170,
-            frameHeight: 400,
-            startFrame: 0,
-            endFrame: 2
-        })
-
-		this.load.spritesheet("hitbox", "./assets/hitbox.png", {
-            frameWidth: 60,
-            frameHeight: 60,
-            startFrame: 0,
-            endFrame: 0
-        })
+		
 	}
 
 	create() {
