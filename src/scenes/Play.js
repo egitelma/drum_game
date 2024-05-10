@@ -135,9 +135,10 @@ class Play extends Phaser.Scene {
         let explosiveCombo = [this.keyLEFTPUNCH, this.keyRIGHTPUNCH, this.keyLEFTPUNCH];
         //      Right punch, left punch, right punch: Rocket punch (right hand)
         let rocketCombo = [this.keyRIGHTPUNCH, this.keyLEFTPUNCH, this.keyRIGHTPUNCH];
-        //      Dodge left, dodge right, punch (either hand): Gun
-        let gunComboLeft = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyLEFTPUNCH];
-        let gunComboRight = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyRIGHTPUNCH];
+        //      Dodge left, dodge right, left punch: Gun
+		let gunComboLeft = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyLEFTPUNCH];
+		//      Dodge right, dodge left, right punch: Gun
+        let gunComboRight = [this.keyRIGHTDODGE, this.keyLEFTDODGE, this.keyRIGHTPUNCH];
         //  Explosive combo
         //      Combo objects
         this.explosiveCombo = this.input.keyboard.createCombo(explosiveCombo, {
@@ -249,13 +250,12 @@ class Play extends Phaser.Scene {
 				//handle right dodge visual movement
 				this.tweens.add({
 					targets: this.LittleMac,
-					ease: "Bounce.easeIn",
 					paused: true,
 					yoyo: false,
 					x: {
 						from: this.LittleMac.x,
 						to: this.LittleMac.x-160,
-						duration: 600
+						duration: 550
 					}
 				}).play();
 
@@ -279,13 +279,12 @@ class Play extends Phaser.Scene {
 				//handle left dodge visual movement
 				this.tweens.add({
 					targets: this.LittleMac,
-					ease: "Bounce.easeIn",
 					paused: true,
 					yoyo: false,
 					x: {
 						from: this.LittleMac.x,
 						to: this.LittleMac.x+160,
-						duration: 600
+						duration: 550
 					}
 				}).play();
 
