@@ -108,7 +108,8 @@ class Play extends Phaser.Scene {
 		this.physics.add.overlap(this.hitBoxGroup, this.hitBoxLeft, () => {
 			console.log("YEEEOUCH")
 		}, (enemy, player) => {
-			if(enemy.active == true && !this.punchCooldown) {
+			if(enemy.active == true && !this.LittleMac.hurtFatigue) {
+				this.LittleMac.hurtFatigue = true
 				return true
 			} else {
 				return false
