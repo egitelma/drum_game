@@ -206,7 +206,24 @@ class Play extends Phaser.Scene {
 
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
-				//handle right dodge movement
+				//handle right dodge visual movement
+				this.tweens.add({
+					targets: this.LittleMac,
+					ease: "Bounce.easeIn",
+					paused: true,
+					yoyo: false,
+					x: {
+						from: this.LittleMac.x,
+						to: this.LittleMac.x-260,
+						duration: 500
+					}
+				}).play();
+				
+
+				//handle right dodge hitbox movement
+
+
+				//cooldown
 				this.inputLockedOut = true;
                 this.time.addEvent({
                     delay: 1000, //a little extra time to be safe
@@ -220,7 +237,23 @@ class Play extends Phaser.Scene {
 				this.inputDodgeR.setVisible(false);
       }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
-				//handle left dodge movement
+				//handle left dodge visual movement
+				this.tweens.add({
+					targets: this.LittleMac,
+					ease: "Bounce.easeIn",
+					paused: true,
+					yoyo: false,
+					x: {
+						from: this.LittleMac.x,
+						to: this.LittleMac.x+260,
+						duration: 500
+					}
+				}).play();
+
+				//handle left dodge hitbox movement
+
+
+				//cooldown
 				this.inputLockedOut = true;
                 this.time.addEvent({
                     delay: 1000, //a little extra time to be safe
