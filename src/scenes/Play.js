@@ -13,15 +13,48 @@ class Play extends Phaser.Scene {
 		//this.load.image("inputR",        "assets/inputR.png");
 		//this.load.image("inputDodgeL",   "assets/inputDodgeL.png");
 		//this.load.image("inputDodgeR",   "assets/inputDodgeR.png");
-        this.load.spritesheet("Little Mac", "./assets/Little_Mac.png", {
-            frameWidth: 243,
-            frameHeight: 410,
+        this.load.spritesheet("Little Mac", "./assets/LittleMacSheet.png", {
+            frameWidth: 170,
+            frameHeight: 400,
             startFrame: 0,
-            endFrame: 0
+            endFrame: 2
         })
+
+		
 	}
 
 	create() {
+
+		this.anims.create({
+			key: "idle",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 0,
+				end: 0
+			})
+		})
+
+		this.anims.create({
+			key: "windup",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 1,
+				end: 1
+			})
+		})
+
+		this.anims.create({
+			key: "punch",
+			repeat: -1,
+			frameRate: 1,
+			frames: this.anims.generateFrameNumbers("Little Mac", {
+				start: 2,
+				end: 2
+			})
+		})
+
         this.add.image(0, 0, "background").setOrigin(0).setScale(2)
 		//variables
 		this.timeRemaining = 60;
@@ -96,8 +129,8 @@ class Play extends Phaser.Scene {
 			//Handle whether player or enemy takes damage
 			//Add here - use a set of rectangle hitboxes to determine whether the player is in range of the attack or not
 
-			//Decrement time - 1 per second, accounting for delta time w/ different refresh rates
-			this.timeRemaining -= 1 / this.game.loop.actualFps;
+			//Decrement time - 1 per second, accounting for delta time w/ different refresh rate
+            this.timeRemaining -= 1 / this.game.loop.actualFps;
 		} else {
 			this.gameEnd();
 		}

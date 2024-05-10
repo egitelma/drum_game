@@ -26,14 +26,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-100)
                 console.log("Moving Right")
+                this.anims.play("idle", false)
             }
             else if(this.x < this.playerHitbox - this.playerHitboxWidth && !this.windup) {
                 this.move(100)
                 console.log("Moving Left")
+                this.anims.play("idle", false)
             } 
             else if(!this.windup && !this.punchCooldown) {
                 this.stop()
                 this.windup = true
+                this.anims.play("windup", true)
                 setTimeout(() => {
                     this.punch()
                     this.windup = false
@@ -71,6 +74,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             //I think this will spawn a different enemy type at the enemies location
             //and the collision checker in the main menu will handle the "punched" effects
         console.log("punched")
+        this.anims.play("punch", true)
         setTimeout(() => {
             this.punchCooldown = false
         }, 2000)
