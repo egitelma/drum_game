@@ -55,9 +55,11 @@ class Play extends Phaser.Scene {
 		this.gameOver = false;
 		this.inputLockedOut = false;
 
+		this.punchFatigue = false
+
 		//Health UI - two rectangles, on top left and top right, both red
-		this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.enemyHealthBar = this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
    		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
@@ -74,7 +76,7 @@ class Play extends Phaser.Scene {
 		this.leftFist = this.add.image(0, 340, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
 		//Player Right Fist (img dimensions: 1632x1224)
-		this.rightFist = this.add.image(width, 340, "fistRight").setOrigin(1, 0);
+		this.rightFist = this.add.image(width - 30, 340, "fistRight").setOrigin(1, 0);
         this.rightFist.setScale(0.25);
         //Gun, Left (off screen)
         this.leftGun = this.add.image(0, height, "gunRight").setOrigin(0, 0);
@@ -84,19 +86,54 @@ class Play extends Phaser.Scene {
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
         this.rightGun.setScale(0.3);
 
-		//Enemy - middle slightly above center
-		//this.add.image(400, 200, "enemy").setOrigin(0, 0);
+		//hitbox group
 
-		//Background
-		//this.add.image(400, 200, "background").setOrigin(0, 0);
+		this.playerHitbox = this.add.group({
+			runChildUpdate: true
+		})
+
+		//punch hitboxes
+		this.hitBoxLeft = this.physics.add.image(game.config.width/2 - 45, game.config.height/2, "hitbox").setActive(false)
+		this.hitBoxRight = this.physics.add.image(game.config.width/2 + 45, game.config.height/2, "hitbox").setActive(false)
+
+		this.hitBoxLeft.setImmovable(true)
+		this.hitBoxRight.setImmovable(true)
+
+		this.playerHitbox.add(this.hitBoxLeft)
+		this.playerHitbox.add(this.hitBoxRight)
+
+		//colliders
+		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
+			console.log("PUNCH LANDED")
+			this.enemyHealth -= 10
+		}, (player, enemy) => {
+			if(player.active == true && !this.punchFatigue) {
+				this.punchFatigue = true
+				return true
+			} else {
+				return false
+			}
+		} )
+		
+		this.physics.add.overlap(this.hitBoxGroup, this.playerHitbox, () => {
+			console.log("YEEEOUCH")
+			this.playerHealth -= 10
+		}, (enemy, player) => {
+			if(enemy.active == true && !this.LittleMac.hurtFatigue) {
+				this.LittleMac.hurtFatigue = true
+				return true
+			} else {
+				return false
+			}
+		})
 
 		//Input Display
 		//use taiko no tatsujin drum icons? switch between white and red/blue for input off and on
-		this.drum = this.add.image(550, 425, "inputDrum").setOrigin(0, 0);
-		this.inputPunchL = this.add.image(563, 433, "inputPunchL").setOrigin(0, 0).setVisible(false);
-		this.inputPunchR = this.add.image(618, 434, "inputPunchR").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeL = this.add.image(548, 419, "inputDodgeL").setOrigin(0, 0).setVisible(false);
-		this.inputDodgeR = this.add.image(619, 419, "inputDodgeR").setOrigin(0, 0).setVisible(false);
+		this.drum = this.add.image(550, 455, "inputDrum").setOrigin(0, 0);
+		this.inputPunchL = this.add.image(563, 463, "inputPunchL").setOrigin(0, 0).setVisible(false);
+		this.inputPunchR = this.add.image(618, 464, "inputPunchR").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeL = this.add.image(548, 449, "inputDodgeL").setOrigin(0, 0).setVisible(false);
+		this.inputDodgeR = this.add.image(619, 449, "inputDodgeR").setOrigin(0, 0).setVisible(false);
 
 		//Inputs
         this.keyLEFTPUNCH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -110,9 +147,10 @@ class Play extends Phaser.Scene {
         let explosiveCombo = [this.keyLEFTPUNCH, this.keyRIGHTPUNCH, this.keyLEFTPUNCH];
         //      Right punch, left punch, right punch: Rocket punch (right hand)
         let rocketCombo = [this.keyRIGHTPUNCH, this.keyLEFTPUNCH, this.keyRIGHTPUNCH];
-        //      Dodge left, dodge right, punch (either hand): Gun
-        let gunComboLeft = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyLEFTPUNCH];
-        let gunComboRight = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyRIGHTPUNCH];
+        //      Dodge left, dodge right, left punch: Gun
+		let gunComboLeft = [this.keyLEFTDODGE, this.keyRIGHTDODGE, this.keyLEFTPUNCH];
+		//      Dodge right, dodge left, right punch: Gun
+        let gunComboRight = [this.keyRIGHTDODGE, this.keyLEFTDODGE, this.keyRIGHTPUNCH];
         //  Explosive combo
         //      Combo objects
         this.explosiveCombo = this.input.keyboard.createCombo(explosiveCombo, {
@@ -212,28 +250,88 @@ class Play extends Phaser.Scene {
 			//Handling end conditions
 			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
 				this.gameOver = true;
+				if(this.playerHealth <= 0){
+					gameWon = false;
+				}
+				else {
+					if(this.playerHealth > this.enemyHealth){
+						gameWon = true;
+					}
+					else {
+						gameWon = false;
+					}
+				}
 			}
 
 			//Update UI
-			this.timeRemainingText.setText("TIME: " + Math.round(this.timeRemaining));
-			//change health bar size based on health
+			this.timeRemainingText.setText("Time: " + Math.round(this.timeRemaining));
+			//change health bar size based on health, shrink from the left side going towards the edge of the screen
+			this.playerHealthBar.setSize(this.playerHealth * 4, 20);
+			this.enemyHealthBar.setSize(this.enemyHealth * 4, 20);
+			//move enemy health bar to accomodate for the new size
+			this.enemyHealthBar.x = width - this.enemyHealthBar.width - 30;
 
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
-				//handle right dodge movement
+				//handle right dodge visual movement
+				this.tweens.add({
+					targets: this.LittleMac,
+					paused: true,
+					yoyo: false,
+					x: {
+						from: this.LittleMac.x,
+						to: this.LittleMac.x-160,
+						duration: 550
+					}
+				}).play();
+
+				//handle right dodge hitbox movement
+
+
+				//cooldown
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
 				this.inputDodgeR.setVisible(true);
 			} else {
 				this.inputDodgeR.setVisible(false);
       }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
-				//handle left dodge movement
+				//handle left dodge visual movement
+				this.tweens.add({
+					targets: this.LittleMac,
+					paused: true,
+					yoyo: false,
+					x: {
+						from: this.LittleMac.x,
+						to: this.LittleMac.x+160,
+						duration: 550
+					}
+				}).play();
+
+				//handle left dodge hitbox movement
+
+
+				//cooldown
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
 				this.inputDodgeL.setVisible(true);
 			} else {
 				this.inputDodgeL.setVisible(false);
 			}
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
-
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -251,6 +349,14 @@ class Play extends Phaser.Scene {
                         duration: 500
                     }
                 }).play();
+				setTimeout(() => {
+					this.hitBoxRight.setActive(true)
+					setTimeout(() => {
+						this.hitBoxRight.setActive(false)
+						this.punchFatigue = false
+					}, 200)
+				}, 500)
+
                 //cooldown
                 this.inputLockedOut = true;
                 this.time.addEvent({
@@ -267,9 +373,8 @@ class Play extends Phaser.Scene {
 			}
             
 			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
-
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
-                this.tweens.add({
+				this.tweens.add({
                     targets: this.leftFist,
                     ease: "Bounce.easeIn",
                     paused: true,
@@ -286,6 +391,13 @@ class Play extends Phaser.Scene {
                     }
                 }).play();
                 //cooldown
+				setTimeout(() => {
+					this.hitBoxLeft.setActive(true)
+					setTimeout(() => {
+						this.hitBoxLeft.setActive(false)
+						this.punchFatigue = false
+					}, 200)
+				}, 300)
                 this.inputLockedOut = true;
                 this.time.addEvent({
                     delay: 1000, //a little extra time to be safe
