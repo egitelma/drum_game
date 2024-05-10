@@ -30,6 +30,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         //level one
         //console.log("enemy x: ", this.x)
         //console.log("enemy level: ", this.level)
+        this.hitBox.x = this.x
         if(this.level == 1) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-100)

@@ -106,7 +106,7 @@ class Play extends Phaser.Scene {
 			}
 		} )
 		
-		this.physics.add.overlap(this.hitBoxGroup, this.hitBoxLeft, () => {
+		this.physics.add.overlap(this.hitBoxGroup, this.playerHitbox, () => {
 			console.log("YEEEOUCH")
 			this.playerHealth -= 10
 		}, (enemy, player) => {
