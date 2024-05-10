@@ -13,6 +13,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.level = enemyLevel
         this.punchCooldown = false  //can it punch?
         this.windup = false         //is it punching?
+        this.hurtFatigue = false
         this.hitBox = scene.physics.add.image(game.config.width/2, game.config.height/2, "hitbox").setActive(false)
         this.hitBox.setImmovable(true)
         //this.hitBox.setScale(2)
@@ -127,6 +128,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.hitBox.setActive(true)
         setTimeout(() => {
             this.hitBox.setActive(false)
+            this.hurtFatigue = false
         }, 200)
         setTimeout(() => {
             this.punchCooldown = false
