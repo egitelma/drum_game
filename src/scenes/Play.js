@@ -254,11 +254,10 @@ class Play extends Phaser.Scene {
 					yoyo: false,
 					x: {
 						from: this.LittleMac.x,
-						to: this.LittleMac.x-260,
-						duration: 500
+						to: this.LittleMac.x-160,
+						duration: 600
 					}
 				}).play();
-				
 
 				//handle right dodge hitbox movement
 
@@ -285,8 +284,8 @@ class Play extends Phaser.Scene {
 					yoyo: false,
 					x: {
 						from: this.LittleMac.x,
-						to: this.LittleMac.x+260,
-						duration: 500
+						to: this.LittleMac.x+160,
+						duration: 600
 					}
 				}).play();
 
