@@ -69,7 +69,7 @@ class Play extends Phaser.Scene {
 		this.leftFist = this.add.image(0, 340, "fistLeft").setOrigin(0, 0);
         this.leftFist.setScale(0.25);
 		//Player Right Fist (img dimensions: 1632x1224)
-		this.rightFist = this.add.image(width, 300, "fistRight").setOrigin(1, 0);
+		this.rightFist = this.add.image(width - 30, 340, "fistRight").setOrigin(1, 0);
         this.rightFist.setScale(0.25);
         //Gun, Right (off screen)
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
