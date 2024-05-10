@@ -28,8 +28,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     //enemy AI - runs every frame
     update() {
         //level one
-        console.log("enemy x: ", this.x)
-        console.log("enemy level: ", this.level)
+        //console.log("enemy x: ", this.x)
+        //console.log("enemy level: ", this.level)
         if(this.level == 1) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-100)
@@ -127,8 +127,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.anims.play("punch", true)
         this.hitBox.setActive(true)
         setTimeout(() => {
-            this.hitBox.setActive(false)
             this.hurtFatigue = false
+            this.hitBox.setActive(false)
         }, 200)
         setTimeout(() => {
             this.punchCooldown = false

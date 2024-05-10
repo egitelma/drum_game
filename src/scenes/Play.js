@@ -96,6 +96,7 @@ class Play extends Phaser.Scene {
 		//colliders
 		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
 			console.log("PUNCH LANDED")
+			this.enemyHealth -= 10
 		}, (player, enemy) => {
 			if(player.active == true && !this.punchFatigue) {
 				this.punchFatigue = true
@@ -107,6 +108,7 @@ class Play extends Phaser.Scene {
 		
 		this.physics.add.overlap(this.hitBoxGroup, this.hitBoxLeft, () => {
 			console.log("YEEEOUCH")
+			this.playerHealth -= 10
 		}, (enemy, player) => {
 			if(enemy.active == true && !this.LittleMac.hurtFatigue) {
 				this.LittleMac.hurtFatigue = true
