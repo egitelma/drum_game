@@ -72,7 +72,7 @@ class Play extends Phaser.Scene {
 
         //enemy
 
-        this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 1).setScale(.8)
+        this.LittleMac = new Enemy(this, game.config.width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
 		//Player Left Fist
 		//this.add.image(100, 300, "playerFistL").setOrigin(0, 0);

@@ -38,7 +38,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 this.windup = true
                 this.anims.play("windup", true)
                 setTimeout(() => {
-                    this.punch()
+                    this.punch(2000)
                     this.windup = false
                 }, 1000)
                 console.log("Winding up")
@@ -49,11 +49,53 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
         //level two
         else if(this.level = 2) {
-
+            if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
+                this.move(-175)
+                console.log("Moving Right")
+                this.anims.play("idle", false)
+            }
+            else if(this.x < this.playerHitbox - this.playerHitboxWidth && !this.windup) {
+                this.move(175)
+                console.log("Moving Left")
+                this.anims.play("idle", false)
+            } 
+            else if(!this.windup && !this.punchCooldown) {
+                this.stop()
+                this.windup = true
+                this.anims.play("windup", true)
+                setTimeout(() => {
+                    this.punch(1200)
+                    this.windup = false
+                }, 600)
+                console.log("Winding up")
+            } else {
+                this.stop()
+            }
         }
         //level three
         else {
-
+            if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
+                this.move(-300)
+                console.log("Moving Right")
+                this.anims.play("idle", false)
+            }
+            else if(this.x < this.playerHitbox - this.playerHitboxWidth && !this.windup) {
+                this.move(300)
+                console.log("Moving Left")
+                this.anims.play("idle", false)
+            } 
+            else if(!this.windup && !this.punchCooldown) {
+                this.stop()
+                this.windup = true
+                this.anims.play("windup", true)
+                setTimeout(() => {
+                    this.punch(700)
+                    this.windup = false
+                }, 500)
+                console.log("Winding up")
+            } else {
+                this.stop()
+            }
         }
     }
 
@@ -68,7 +110,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     //punch the player
-    punch() {
+    punch(cooldown) {
         this.punchCooldown = true
         //punching code 
             //I think this will spawn a different enemy type at the enemies location
@@ -77,7 +119,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.anims.play("punch", true)
         setTimeout(() => {
             this.punchCooldown = false
-        }, 2000)
+        }, cooldown)
     }
 
 }
