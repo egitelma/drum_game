@@ -5,7 +5,14 @@ let config = {
     render: {
         pixelArt: true
     },
-    scene: [Load, Menu, Play, End],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true,
+            //gravity: { y: 1000 }
+        }
+    },
+    scene: [Load, Menu, Play, End, LevelSelect],
     backgroundColor: "#FFFFFF",
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -19,3 +26,5 @@ let { width, height } = game.config;
 let gameWon = false;
 
 let enemyList = [];
+
+let enemyLevel = 1;

@@ -41,7 +41,7 @@ class Menu extends Phaser.Scene{
         });
         playBox.on("pointerdown", () => {
             //open level select
-            this.scene.start("playScene");
+            this.scene.start("levelSelectScene");
         })
     }
 
