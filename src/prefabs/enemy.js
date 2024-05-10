@@ -10,7 +10,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.setOrigin(.5)
 
         //set custom parameters
-        this.level = level
+        this.level = enemyLevel
         this.punchCooldown = false  //can it punch?
         this.windup = false         //is it punching?
         this.hitBox = scene.physics.add.image(game.config.width/2, game.config.height/2, "hitbox").setActive(false)
@@ -27,7 +27,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     update() {
         //level one
         console.log("enemy x: ", this.x)
-        if(this.level = 1) {
+        console.log("enemy level: ", this.level)
+        if(this.level == 1) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-100)
                 console.log("Moving Right")
@@ -53,7 +54,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         }
         //level two
-        else if(this.level = 2) {
+        else if(this.level == 2) {
             if(this.x > this.playerHitbox + this.playerHitboxWidth && !this.windup) {
                 this.move(-175)
                 console.log("Moving Right")
