@@ -17,6 +17,11 @@ class Play extends Phaser.Scene {
 		//Background
 		this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
 
+		//blood
+		this.blood = this.add.image(0, 0, "blood").setOrigin(0).setAlpha(0)
+
+		this.bloodAlpha = 0
+
 		//Animations
 		this.anims.create({
 			key: "idle",
@@ -96,6 +101,10 @@ class Play extends Phaser.Scene {
 
 		//hitbox group
 
+		//combo flag
+
+		this.comboFlag = false
+
 		this.playerHitbox = this.add.group({
 			runChildUpdate: true
 		})
@@ -114,6 +123,14 @@ class Play extends Phaser.Scene {
 		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
 			console.log("PUNCH LANDED")
 			this.enemyHealth -= 10
+			if(this.comboFlag){
+				this.enemyHealth -= 20
+				this.comboFlag = false
+			}
+			this.LittleMac.tint = '0xFF0000'
+            setTimeout(() => {
+                this.LittleMac.tint = '0xFFFFFF'
+            }, 200)
 		}, (player, enemy) => {
 			if(player.active == true && !this.punchFatigue) {
 				this.punchFatigue = true
@@ -126,6 +143,7 @@ class Play extends Phaser.Scene {
 		this.physics.add.overlap(this.hitBoxGroup, this.playerHitbox, () => {
 			console.log("YEEEOUCH")
 			this.playerHealth -= 10
+			this.bloodAlpha += 0.08
 		}, (enemy, player) => {
 			if(enemy.active == true && !this.LittleMac.hurtFatigue) {
 				this.LittleMac.hurtFatigue = true
@@ -297,6 +315,8 @@ class Play extends Phaser.Scene {
 	update() {
 		if (!this.gameOver) {
 			//Handling end conditions
+			//update blood alpha
+			this.blood.setAlpha(this.bloodAlpha)
 			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
 				this.gameOver = true;
 				if(this.playerHealth <= 0){
