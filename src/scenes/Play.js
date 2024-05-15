@@ -89,6 +89,7 @@ class Play extends Phaser.Scene {
 		//Explosive
 		this.explosive = this.add.image(width / 2, height, "explosive").setOrigin(1, 0);
 		this.explosive.setScale(0.09).setRotation(Phaser.Math.DegToRad(-45));
+		this.explosive.setX(this.explosive.x - 400);
 		//Rocket
 		this.rocket = this.add.image(width / 2, height, "rocket").setOrigin(0.5, 0);
 		this.rocket.setScale(0.3);
@@ -192,6 +193,7 @@ class Play extends Phaser.Scene {
 				this.drum.setVisible(false);
 				this.leftFist.setVisible(false);
 				this.rightFist.setVisible(false);
+				this.explosive.setVisible(true);
 				this.inputLockedOut = true;
 				this.comboLockedOut = true;
 				//make everything visible again after 2s
@@ -203,6 +205,12 @@ class Play extends Phaser.Scene {
 						this.rightFist.setVisible(true);
 						this.inputLockedOut = false;
 						this.comboLockedOut = false;
+					}
+				});
+				this.time.addEvent({
+					delay: 1040,
+					callback: () => {
+						this.explosive.setVisible(false);
 					}
 				});
 
