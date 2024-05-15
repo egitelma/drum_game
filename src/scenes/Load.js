@@ -39,6 +39,8 @@ class Load extends Phaser.Scene {
 		this.load.image("inputDodgeR", "inputDodgeR.png");
         this.load.image("gunRight", "gun_point_right.png");
         this.load.image("background", "background.png");
+        this.load.image("explosive", "explosive.png");
+        this.load.image("rocket", "rocket.png");
         this.load.spritesheet("Little Mac", "LittleMacSheet.png", {
             frameWidth: 170,
             frameHeight: 400,
