@@ -97,7 +97,8 @@ class Play extends Phaser.Scene {
 		this.explosive.setX(this.explosive.x - 400);
 		//Rocket
 		this.rocket = this.add.image(width / 2, height, "rocket").setOrigin(0.5, 0);
-		this.rocket.setScale(0.3);
+		this.rocket.setScale(0.18).setRotation(Phaser.Math.DegToRad(-45));
+		this.rocket.setX(this.rocket.x + 400);
 
 		//hitbox group
 
@@ -212,6 +213,7 @@ class Play extends Phaser.Scene {
 				this.leftFist.setVisible(false);
 				this.rightFist.setVisible(false);
 				this.explosive.setVisible(true);
+				this.rocket.setVisible(true);
 				this.inputLockedOut = true;
 				this.comboLockedOut = true;
 				//make everything visible again after 2s
@@ -226,9 +228,10 @@ class Play extends Phaser.Scene {
 					}
 				});
 				this.time.addEvent({
-					delay: 1040,
+					delay: 1041,
 					callback: () => {
 						this.explosive.setVisible(false);
+						this.rocket.setVisible(false);
 					}
 				});
 
@@ -255,17 +258,17 @@ class Play extends Phaser.Scene {
 					//Launch rocket punch
 					this.tweens.add({
 						targets: this.rocket,
-						ease: "Quadratic.easeIn",
+						ease: "Quadratic.In",
 						paused: true,
 						yoyo: true,
 						x: {
 							from: this.rocket.x,
-							to: this.rocket.x + 320,
+							to: this.rocket.x - 360,
 							duration: 1000
 						},
 						y: {
 							from: height,
-							to: height - 320,
+							to: height - 360,
 							duration: 1000
 						}
 					}).play();
