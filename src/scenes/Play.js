@@ -17,6 +17,11 @@ class Play extends Phaser.Scene {
 		//Background
 		this.background = this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
 
+		//blood
+		this.blood = this.add.image(0, 0, "blood").setOrigin(0).setAlpha(0)
+
+		this.bloodAlpha = 0
+
 		//Animations
 		this.anims.create({
 			key: "idle",
@@ -54,6 +59,8 @@ class Play extends Phaser.Scene {
 		this.enemyHealth = 100;
 		this.gameOver = false;
 		this.inputLockedOut = false;
+		this.comboLockedOut = false;
+
 		this.punchFatigue = false
 
 		//Health UI - two rectangles, on top left and top right, both red
@@ -78,9 +85,21 @@ class Play extends Phaser.Scene {
         this.leftGun.setScale(0.3);
         //Gun, Right (off screen)
         this.rightGun = this.add.image(width, height, "gunRight").setOrigin(1, 0);
-        this.rightGun.setScale(0.3);
+		this.rightGun.setScale(0.3);
+		//Explosive
+		this.explosive = this.add.image(width / 2, height, "explosive").setOrigin(1, 0);
+		this.explosive.setScale(0.09).setRotation(Phaser.Math.DegToRad(-45));
+		this.explosive.setX(this.explosive.x - 400);
+		//Rocket
+		this.rocket = this.add.image(width / 2, height, "rocket").setOrigin(0.5, 0);
+		this.rocket.setScale(0.18).setRotation(Phaser.Math.DegToRad(-45));
+		this.rocket.setX(this.rocket.x + 400);
 
 		//hitbox group
+
+		//combo flag
+
+		this.comboFlag = false
 
 		this.playerHitbox = this.add.group({
 			runChildUpdate: true
@@ -100,6 +119,14 @@ class Play extends Phaser.Scene {
 		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
 			console.log("PUNCH LANDED")
 			this.enemyHealth -= 10
+			if(this.comboFlag){
+				this.enemyHealth -= 20
+				this.comboFlag = false
+			}
+			this.LittleMac.tint = '0xFF0000'
+            setTimeout(() => {
+                this.LittleMac.tint = '0xFFFFFF'
+            }, 200)
 		}, (player, enemy) => {
 			if(player.active == true && !this.punchFatigue) {
 				this.punchFatigue = true
@@ -112,6 +139,7 @@ class Play extends Phaser.Scene {
 		this.physics.add.overlap(this.hitBoxGroup, this.playerHitbox, () => {
 			console.log("YEEEOUCH")
 			this.playerHealth -= 10
+			this.bloodAlpha += 0.08
 		}, (enemy, player) => {
 			if(enemy.active == true && !this.LittleMac.hurtFatigue) {
 				this.LittleMac.hurtFatigue = true
@@ -174,74 +202,119 @@ class Play extends Phaser.Scene {
         //      Combo event
         this.input.keyboard.on('keycombomatch', (event) => {
             //Stuff to run for every combo
-            //make everything invisible
-            this.drum.setVisible(false);
-            this.leftFist.setVisible(false);
-            this.rightFist.setVisible(false);
-            this.inputLockedOut = true;
-            //make everything visible again after 2s
-            this.time.addEvent({
-                delay: 2000,
-                callback: () => {
-                    this.drum.setVisible(true);
-                    this.leftFist.setVisible(true);
-                    this.rightFist.setVisible(true);
-                    this.inputLockedOut = false;
-                }
-            });
+			//make everything invisible
+			if (!this.comboLockedOut) {
+				this.drum.setVisible(false);
+				this.leftFist.setVisible(false);
+				this.rightFist.setVisible(false);
+				this.explosive.setVisible(true);
+				this.rocket.setVisible(true);
+				this.inputLockedOut = true;
+				this.comboLockedOut = true;
+				//make everything visible again after 2s
+				this.time.addEvent({
+					delay: 2000,
+					callback: () => {
+						this.drum.setVisible(true);
+						this.leftFist.setVisible(true);
+						this.rightFist.setVisible(true);
+						this.inputLockedOut = false;
+						this.comboLockedOut = false;
+					}
+				});
+				this.time.addEvent({
+					delay: 1041,
+					callback: () => {
+						this.explosive.setVisible(false);
+						this.rocket.setVisible(false);
+					}
+				});
 
-            if(this.explosiveCombo.matched){
-                //Launch improvised explosive
-                this.combo = "explosive";
-            }
-            else if(this.rocketCombo.matched){
-                //Launch rocket punch
-                this.combo = "rocket";
-            }
-            else if(this.gunComboLeft.matched){
-                //Shoot a gun (left hand)
-                this.tweens.add({
-                    targets: this.leftGun,
-                    ease: "Quadratic.easeIn",
-                    paused: true,
-                    yoyo: true,
-                    x: {
-                        from: this.leftGun.x,
-                        to: this.leftGun.x+320,
-                        duration: 1000
-                    },
-                    y: {
-                        from: height,
-                        to: height-320,
-                        duration: 1000
-                    }
-                }).play();
-            }
-            else if(this.gunComboRight.matched){
-                //Shoot a gun (right hand)
-                this.tweens.add({
-                    targets: this.rightGun,
-                    ease: "Quadratic.In",
-                    paused: true,
-                    yoyo: true,
-                    x: {
-                        from: this.rightGun.x,
-                        to: this.rightGun.x-320,
-                        duration: 1000
-                    },
-                    y: {
-                        from: height,
-                        to: height-320,
-                        duration: 1000
-                    }
-                }).play();
-            }
+				if (this.explosiveCombo.matched) {
+					//Launch improvised explosive
+					this.tweens.add({
+						targets: this.explosive,
+						ease: "Quadratic.easeIn",
+						paused: true,
+						yoyo: true,
+						x: {
+							from: this.explosive.x,
+							to: this.explosive.x + 320,
+							duration: 1000
+						},
+						y: {
+							from: height,
+							to: height - 320,
+							duration: 1000
+						}
+					}).play();
+				}
+				else if (this.rocketCombo.matched) {
+					//Launch rocket punch
+					this.tweens.add({
+						targets: this.rocket,
+						ease: "Quadratic.In",
+						paused: true,
+						yoyo: true,
+						x: {
+							from: this.rocket.x,
+							to: this.rocket.x - 360,
+							duration: 1000
+						},
+						y: {
+							from: height,
+							to: height - 360,
+							duration: 1000
+						}
+					}).play();
+				}
+				else if (this.gunComboLeft.matched) {
+					//Shoot a gun (left hand)
+					this.tweens.add({
+						targets: this.leftGun,
+						ease: "Quadratic.easeIn",
+						paused: true,
+						yoyo: true,
+						x: {
+							from: this.leftGun.x,
+							to: this.leftGun.x + 320,
+							duration: 1000
+						},
+						y: {
+							from: height,
+							to: height - 320,
+							duration: 1000
+						}
+					}).play();
+				}
+				else if (this.gunComboRight.matched) {
+					//Shoot a gun (right hand)
+					this.tweens.add({
+						targets: this.rightGun,
+						ease: "Quadratic.In",
+						paused: true,
+						yoyo: true,
+						x: {
+							from: this.rightGun.x,
+							to: this.rightGun.x - 320,
+							duration: 1000
+						},
+						y: {
+							from: height,
+							to: height - 320,
+							duration: 1000
+						}
+					}).play();
+				}
+			}
         })
 	}
 
 	update() {
 		if (!this.gameOver) {
 			//Handling end conditions
+			//update blood alpha
+			this.blood.setAlpha(this.bloodAlpha)
 			if (this.timeRemaining <= 0 || this.playerHealth <= 0 || this.enemyHealth <= 0) {
 				this.gameOver = true;
 				if(this.playerHealth <= 0){
@@ -266,7 +339,7 @@ class Play extends Phaser.Scene {
 			this.enemyHealthBar.x = width - this.enemyHealthBar.width - 30;
 
 			//Dodging
-			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
+			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
 				//handle right dodge visual movement
 				//tween little mac & background
 				this.tweens.add({
@@ -291,7 +364,7 @@ class Play extends Phaser.Scene {
 			} else {
 				this.inputDodgeR.setVisible(false);
       }
-			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
+			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Dodge
 				//handle left dodge visual movement
 				//tween little mac & background
 				//canvas size is 1280. so the background should only scroll to maximum 520 i think? and 1280 the other way
@@ -317,7 +390,7 @@ class Play extends Phaser.Scene {
 				this.inputDodgeL.setVisible(false);
 			}
 			//Punching 
-			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut) { //Player Right Punch
+			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Punch
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -358,7 +431,7 @@ class Play extends Phaser.Scene {
 				this.inputPunchR.setVisible(false);
 			}
             
-			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut) { //Player Left Punch
+			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Punch
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
 				this.tweens.add({
                     targets: this.leftFist,

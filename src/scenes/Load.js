@@ -30,6 +30,7 @@ class Load extends Phaser.Scene {
         this.load.path = "./assets/";
         this.load.image("fistLeft", "fist_left.png");
         this.load.image("fistRight", "fist_right.png");
+        this.load.image("blood", "blood.png")
         // this.load.image("background", "boxing-ring.jpg");
 		this.load.image("inputDrum",   "inputDrum.png");
 		this.load.image("inputPunchL", "inputPunchL.png");
@@ -38,6 +39,8 @@ class Load extends Phaser.Scene {
 		this.load.image("inputDodgeR", "inputDodgeR.png");
         this.load.image("gunRight", "gun_point_right.png");
         this.load.image("background", "background.png");
+        this.load.image("explosive", "explosive.png");
+        this.load.image("rocket", "rocket.png");
         this.load.spritesheet("Little Mac", "LittleMacSheet.png", {
             frameWidth: 170,
             frameHeight: 400,
