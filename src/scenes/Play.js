@@ -15,7 +15,7 @@ class Play extends Phaser.Scene {
 
 	create() {
 		//Background
-		this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
+		this.background = this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
 
 		//Animations
 		this.anims.create({
@@ -54,7 +54,6 @@ class Play extends Phaser.Scene {
 		this.enemyHealth = 100;
 		this.gameOver = false;
 		this.inputLockedOut = false;
-
 		this.punchFatigue = false
 
 		//Health UI - two rectangles, on top left and top right, both red
@@ -65,11 +64,6 @@ class Play extends Phaser.Scene {
    		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
 		//Time UI - top center, white
-		// this.timeRemainingText = this.add.text(width/2 - 20, 0, "Time: " + this.timeRemaining, {
-        //     fontFamily: "blockFont", 
-        //     fontSize: "20px", 
-        //     color: "#000000" 
-        // }).setOrigin(0.5, 0);
         this.timeRemainingText = this.add.bitmapText(width/2-20, 32, "blockFont", "TIME: " + this.timeRemaining, 20, 1).setOrigin(0.5, 0);
 
 		//Player Left Fist
@@ -274,19 +268,15 @@ class Play extends Phaser.Scene {
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut) { //Player Right Dodge
 				//handle right dodge visual movement
+				//tween little mac & background
 				this.tweens.add({
-					targets: this.LittleMac,
+					targets: [this.LittleMac, this.background, this.timeRemainingText],
 					paused: true,
 					yoyo: false,
-					x: {
-						from: this.LittleMac.x,
-						to: this.LittleMac.x-160,
-						duration: 550
-					}
+					x: '-=160',
+					duration: 550
 				}).play();
-
-				//handle right dodge hitbox movement
-
+				console.log(this.background.x);
 
 				//cooldown
 				this.inputLockedOut = true;
@@ -303,19 +293,15 @@ class Play extends Phaser.Scene {
       }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut) { //Player Left Dodge
 				//handle left dodge visual movement
+				//tween little mac & background
+				//canvas size is 1280. so the background should only scroll to maximum 520 i think? and 1280 the other way
 				this.tweens.add({
-					targets: this.LittleMac,
+					targets: [this.LittleMac, this.background, this.timeRemainingText],
 					paused: true,
 					yoyo: false,
-					x: {
-						from: this.LittleMac.x,
-						to: this.LittleMac.x+160,
-						duration: 550
-					}
+					x: '+=160',
+					duration: 550
 				}).play();
-
-				//handle left dodge hitbox movement
-
 
 				//cooldown
 				this.inputLockedOut = true;
