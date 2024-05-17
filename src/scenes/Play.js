@@ -95,7 +95,33 @@ class Play extends Phaser.Scene {
 		this.rocket.setScale(0.18).setRotation(Phaser.Math.DegToRad(-45));
 		this.rocket.setX(this.rocket.x + 400);
 
-		//hitbox group
+		//add sfx
+		this.drumMid = this.sound.add("drumMiddle", {
+            mute: false,
+            volume: 1,
+            loop: false
+        });
+		this.drumSide = this.sound.add("drumSide", {
+			mute: false,
+			volume: 1,
+			loop: false
+		});
+		this.ough = this.sound.add("ough", {
+			mute: false,
+			volume: 1,
+			loop: false
+		});
+		this.punch = this.sound.add("punchLand", {
+			mute: false,
+			volume: 1,
+			loop: false
+		});
+		//add background track
+		this.bgm = this.sound.add("mainBGM", {
+			mute: false,
+			volume: 1,
+			loop: true
+		}).play();
 
 		//combo flag
 
@@ -118,6 +144,8 @@ class Play extends Phaser.Scene {
 		//colliders
 		this.physics.add.overlap(this.playerHitbox, this.LittleMac, () => {
 			console.log("PUNCH LANDED")
+			//play sfx
+			this.punch.play();
 			this.enemyHealth -= 10
 			if(this.comboFlag){
 				this.enemyHealth -= 20
@@ -138,6 +166,8 @@ class Play extends Phaser.Scene {
 		
 		this.physics.add.overlap(this.hitBoxGroup, this.playerHitbox, () => {
 			console.log("YEEEOUCH")
+			//play sfx
+			this.ough.play();
 			this.playerHealth -= 10
 			this.bloodAlpha += 0.08
 		}, (enemy, player) => {
@@ -343,7 +373,7 @@ class Play extends Phaser.Scene {
 				}
 			}
         })
-	}
+	} //end create function
 
 	update() {
 		if (!this.gameOver) {
@@ -388,6 +418,9 @@ class Play extends Phaser.Scene {
 					}).play();
 				}
 
+				//play sfx
+				this.drumSide.play();
+
 				//cooldown
 				this.inputLockedOut = true;
                 this.time.addEvent({
@@ -415,6 +448,9 @@ class Play extends Phaser.Scene {
 					}).play();
 				}
 
+				//play sfx
+				this.drumSide.play();
+
 				//cooldown
 				this.inputLockedOut = true;
                 this.time.addEvent({
@@ -430,6 +466,8 @@ class Play extends Phaser.Scene {
 			}
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Punch
+				//play sfx
+				this.drumMid.play();
 				//play right punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
                 this.tweens.add({
                     targets: this.rightFist,
@@ -471,6 +509,8 @@ class Play extends Phaser.Scene {
 			}
             
 			if (this.keyLEFTPUNCH.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Punch
+				//play sfx
+				this.drumMid.play();
 				//play left punch animation - maybe just like move fist sprite towards enemy sprite and make it a bit smaller
 				this.tweens.add({
                     targets: this.leftFist,
@@ -525,6 +565,7 @@ class Play extends Phaser.Scene {
 	} //end update
 
 	gameEnd(){
+		this.sound.stopAll();
 		this.scene.start("endScene");
 	}
 }

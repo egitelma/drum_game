@@ -31,7 +31,6 @@ class Load extends Phaser.Scene {
         this.load.image("fistLeft", "fist_left.png");
         this.load.image("fistRight", "fist_right.png");
         this.load.image("blood", "blood.png")
-        // this.load.image("background", "boxing-ring.jpg");
 		this.load.image("inputDrum",   "inputDrum.png");
 		this.load.image("inputPunchL", "inputPunchL.png");
 		this.load.image("inputPunchR", "inputPunchR.png");
@@ -56,12 +55,22 @@ class Load extends Phaser.Scene {
         //then fonts
         this.load.path = "./assets/fonts/";
         this.load.bitmapFont("blockFont", "dogica_reg.png", "dogica_reg.xml");
+        //sfx, finally - all royalty free ofc
+        this.load.path = "./assets/sound/";
+        this.load.audio("drumMiddle", "drum_sfx.mp3");
+        this.load.audio("wawawawa", "wawawawa.mp3");
+        this.load.audio("tada", "tada.mp3");
+        this.load.audio("drumSide", "drumtap_sfx.mp3");
+        this.load.audio("punchLand", "punch.mp3");
+        this.load.audio("ough", "ough.mp3");
+        //and BGM - still royalty free
+        this.load.audio("menuBGM", "menu_bgm.mp3");
+        this.load.audio("mainBGM", "main_bgm.mp3");
 
-        //populate the enemy list with enemies (4 enemies to start)
-        let numOfEnemies = 4;
-        for(let i=0; i<numOfEnemies; i++){
-            enemyList.push() //new Enemy prefab
-        }
+        // let numOfEnemies = 4;
+        // for(let i=0; i<numOfEnemies; i++){
+        //     enemyList.push() //new Enemy prefab
+        // }
     }
 
     create() {

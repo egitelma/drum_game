@@ -48,7 +48,7 @@ class LevelSelect extends Phaser.Scene{
         });
         levelOneBox.on("pointerdown", () => {
 			enemyLevel = 1;
-            this.scene.start("playScene");
+            this.changeScene();
 		})
 		levelTwoBox.setInteractive({
 			hitArea: levelTwoBox,
@@ -56,7 +56,7 @@ class LevelSelect extends Phaser.Scene{
 		});
 		levelTwoBox.on("pointerdown", () => {
 			enemyLevel = 2;
-			this.scene.start("playScene");
+			this.changeScene();
 		});
 		levelThreeBox.setInteractive({
 			hitArea: levelThreeBox,
@@ -64,7 +64,12 @@ class LevelSelect extends Phaser.Scene{
 		});
 		levelThreeBox.on("pointerdown", () => {
 			enemyLevel = 3;
-			this.scene.start("playScene");
+			this.changeScene();
 		});
     }
+
+	changeScene(){
+		this.sound.stopAll();
+		this.scene.start("playScene");
+	}
 }

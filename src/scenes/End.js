@@ -14,10 +14,20 @@ class End extends Phaser.Scene {
 
         if(gameWon){
             //If the game was won, do this
+            this.sound.add("tada", {
+                mute: false,
+                volume: 1,
+                loop: false
+            }).play();
             endText.setText("YOU WIN!");
         }
         else {
             //If the game was lost, do this
+            this.sound.add("wawawawa", {
+                mute: false,
+                volume: 1,
+                loop: false
+            }).play();
             endText.setText("YOU LOSE!");
         }
 

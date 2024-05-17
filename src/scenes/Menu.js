@@ -43,6 +43,13 @@ class Menu extends Phaser.Scene{
             //open level select
             this.scene.start("levelSelectScene");
         })
+
+        //play dramatic tunes
+        this.bgm = this.sound.add("menuBGM", {
+            mute: false,
+            volume: 1,
+            loop: true
+        }).play();
     }
 
     openLevelSelect(){
