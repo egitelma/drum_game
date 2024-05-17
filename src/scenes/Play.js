@@ -342,14 +342,16 @@ class Play extends Phaser.Scene {
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
 				//handle right dodge visual movement
 				//tween little mac & background
-				this.tweens.add({
-					targets: [this.LittleMac, this.background, this.timeRemainingText],
-					paused: true,
-					yoyo: false,
-					x: '-=160',
-					duration: 550
-				}).play();
-				console.log(this.background.x);
+				//barriers: 380 to prevent right-scootng, 900 to prevent left-scooting?
+				if(this.background.x > 380){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '-=130',
+						duration: 550
+					}).play();
+				}
 
 				//cooldown
 				this.inputLockedOut = true;
@@ -367,14 +369,16 @@ class Play extends Phaser.Scene {
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Dodge
 				//handle left dodge visual movement
 				//tween little mac & background
-				//canvas size is 1280. so the background should only scroll to maximum 520 i think? and 1280 the other way
-				this.tweens.add({
-					targets: [this.LittleMac, this.background, this.timeRemainingText],
-					paused: true,
-					yoyo: false,
-					x: '+=160',
-					duration: 550
-				}).play();
+				//left barrier is 900
+				if(this.background.x < 900){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '+=130',
+						duration: 550
+					}).play();
+				}
 
 				//cooldown
 				this.inputLockedOut = true;
