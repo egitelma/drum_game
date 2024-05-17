@@ -118,6 +118,13 @@ class Play extends Phaser.Scene {
 			volume: 1,
 			loop: false
 		});
+
+		this.gun = this.sound.add("gun", {
+			mute: false,
+			volume: 1,
+			loop: false
+		});
+
 		//add background track
 		this.bgm = this.sound.add("mainBGM", {
 			mute: false,
@@ -339,6 +346,7 @@ class Play extends Phaser.Scene {
 					}).play();
 					setTimeout(() => {
 						this.hitBoxRight.setActive(true)
+						this.gun.play()
 						this.comboFlag = true
 						setTimeout(() => {
 							this.hitBoxRight.setActive(false)
@@ -366,6 +374,7 @@ class Play extends Phaser.Scene {
 					}).play();
 					setTimeout(() => {
 						this.hitBoxLeft.setActive(true)
+						this.gun.play()
 						this.comboFlag = true
 						setTimeout(() => {
 							this.hitBoxLeft.setActive(false)
