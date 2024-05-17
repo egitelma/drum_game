@@ -15,7 +15,7 @@ class Play extends Phaser.Scene {
 
 	create() {
 		//Background
-		this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
+		this.background = this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
 
 		//blood
 		this.blood = this.add.image(0, 0, "blood").setOrigin(0).setAlpha(0)
@@ -65,17 +65,12 @@ class Play extends Phaser.Scene {
 
 		//Health UI - two rectangles, on top left and top right, both red
 		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.enemyHealthBar = this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.enemyHealthBar = this.add.rectangle(width - 390, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
    		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
 
 		//Time UI - top center, white
-		// this.timeRemainingText = this.add.text(width/2 - 20, 0, "Time: " + this.timeRemaining, {
-        //     fontFamily: "blockFont", 
-        //     fontSize: "20px", 
-        //     color: "#000000" 
-        // }).setOrigin(0.5, 0);
         this.timeRemainingText = this.add.bitmapText(width/2-20, 32, "blockFont", "TIME: " + this.timeRemaining, 20, 1).setOrigin(0.5, 0);
 
 		//Player Left Fist
@@ -94,9 +89,11 @@ class Play extends Phaser.Scene {
 		//Explosive
 		this.explosive = this.add.image(width / 2, height, "explosive").setOrigin(1, 0);
 		this.explosive.setScale(0.09).setRotation(Phaser.Math.DegToRad(-45));
+		this.explosive.setX(this.explosive.x - 400);
 		//Rocket
 		this.rocket = this.add.image(width / 2, height, "rocket").setOrigin(0.5, 0);
-		this.rocket.setScale(0.3);
+		this.rocket.setScale(0.18).setRotation(Phaser.Math.DegToRad(-45));
+		this.rocket.setX(this.rocket.x + 400);
 
 		//hitbox group
 
@@ -210,6 +207,8 @@ class Play extends Phaser.Scene {
 				this.drum.setVisible(false);
 				this.leftFist.setVisible(false);
 				this.rightFist.setVisible(false);
+				this.explosive.setVisible(true);
+				this.rocket.setVisible(true);
 				this.inputLockedOut = true;
 				this.comboLockedOut = true;
 				//make everything visible again after 2s
@@ -221,6 +220,13 @@ class Play extends Phaser.Scene {
 						this.rightFist.setVisible(true);
 						this.inputLockedOut = false;
 						this.comboLockedOut = false;
+					}
+				});
+				this.time.addEvent({
+					delay: 1041,
+					callback: () => {
+						this.explosive.setVisible(false);
+						this.rocket.setVisible(false);
 					}
 				});
 
@@ -256,17 +262,17 @@ class Play extends Phaser.Scene {
 					//Launch rocket punch
 					this.tweens.add({
 						targets: this.rocket,
-						ease: "Quadratic.easeIn",
+						ease: "Quadratic.In",
 						paused: true,
 						yoyo: true,
 						x: {
 							from: this.rocket.x,
-							to: this.rocket.x + 320,
+							to: this.rocket.x - 360,
 							duration: 1000
 						},
 						y: {
 							from: height,
-							to: height - 320,
+							to: height - 360,
 							duration: 1000
 						}
 					}).play();
@@ -355,24 +361,22 @@ class Play extends Phaser.Scene {
 			this.playerHealthBar.setSize(this.playerHealth * 4, 20);
 			this.enemyHealthBar.setSize(this.enemyHealth * 4, 20);
 			//move enemy health bar to accomodate for the new size
-			this.enemyHealthBar.x = width - this.enemyHealthBar.width - 30;
+			this.enemyHealthBar.x = width - this.enemyHealthBar.width;
 
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
 				//handle right dodge visual movement
-				this.tweens.add({
-					targets: this.LittleMac,
-					paused: true,
-					yoyo: false,
-					x: {
-						from: this.LittleMac.x,
-						to: this.LittleMac.x-160,
+				//tween little mac & background
+				//barriers: 380 to prevent right-scootng, 900 to prevent left-scooting?
+				if(this.background.x > 380){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '-=130',
 						duration: 550
-					}
-				}).play();
-
-				//handle right dodge hitbox movement
-
+					}).play();
+				}
 
 				//cooldown
 				this.inputLockedOut = true;
@@ -389,19 +393,17 @@ class Play extends Phaser.Scene {
       }
 			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Dodge
 				//handle left dodge visual movement
-				this.tweens.add({
-					targets: this.LittleMac,
-					paused: true,
-					yoyo: false,
-					x: {
-						from: this.LittleMac.x,
-						to: this.LittleMac.x+160,
+				//tween little mac & background
+				//left barrier is 900
+				if(this.background.x < 900){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '+=130',
 						duration: 550
-					}
-				}).play();
-
-				//handle left dodge hitbox movement
-
+					}).play();
+				}
 
 				//cooldown
 				this.inputLockedOut = true;
