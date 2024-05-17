@@ -55,6 +55,7 @@ class Load extends Phaser.Scene {
         //then fonts
         this.load.path = "./assets/fonts/";
         this.load.bitmapFont("blockFont", "dogica_reg.png", "dogica_reg.xml");
+        this.load.bitmapFont("titleFont", "crang.png", "crang.xml");
         //sfx, finally - all royalty free ofc
         this.load.path = "./assets/sound/";
         this.load.audio("drumMiddle", "drum_sfx.mp3");

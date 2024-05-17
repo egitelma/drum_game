@@ -64,11 +64,13 @@ class Play extends Phaser.Scene {
 		this.punchFatigue = false
 
 		//Health UI - two rectangles, on top left and top right, both red
-		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.enemyHealthBar = this.add.rectangle(width - 390, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.playerHealthBar = this.add.rectangle(0, 10, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.enemyHealthBar = this.add.rectangle(width - 390, 10, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.playerHealthText = this.add.bitmapText(10, 14, "blockFont", "PLAYER", 12).setOrigin(0, 0);
+		this.enemyHealthText = this.add.bitmapText(width-10, 14, "blockFont", "BOXER", 12).setOrigin(1, 0);
 
     	//enemy
-   		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
+   		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8);
 
 		//Time UI - top center, white
         this.timeRemainingText = this.add.bitmapText(width/2-20, 32, "blockFont", "TIME: " + this.timeRemaining, 20, 1).setOrigin(0.5, 0);

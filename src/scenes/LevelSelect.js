@@ -7,13 +7,18 @@ class LevelSelect extends Phaser.Scene{
         //create things in the scene
         let graphics = this.add.graphics();
 
+		//set background
+        let background = this.add.image(width/2, 0, "background").setOrigin(0.5, 0);
+        let tint = this.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0, 0);
+
         //levelSelect text
-        let levelSelectText = this.add.text(width/2-320, height/4, "level select", {
-            fontFamily: "Arial",
-            fontSize: "64px",
-            color: "#000000",
-            align: "center"
-		})
+        // let levelSelectText = this.add.text(width/2-320, height/4, "level select", {
+        //     fontFamily: "Arial",
+        //     fontSize: "64px",
+        //     color: "#000000",
+        //     align: "center"
+		// })
+		let levelSelectText = this.add.bitmapText(width/2, height/4, "titleFont", "level select", 64).setOrigin(0.5, 0.5);
 
 		//level select options
 		//level one

@@ -5,12 +5,13 @@ class End extends Phaser.Scene {
 
     create(){
         let background = this.add.rectangle(0, 0, 2500, 640 * 8, 0x000000);
-        let endText = this.add.text(width / 2 - 200, height / 2 - 30, "TEXT", {
-            fontFamily: "Arial",
-            fontSize: "48px",
-            color: "#FFFFFF",
-            align: "center"
-        });
+        // let endText = this.add.text(width / 2 - 200, height / 2 - 30, "TEXT", {
+        //     fontFamily: "Arial",
+        //     fontSize: "48px",
+        //     color: "#FFFFFF",
+        //     align: "center"
+        // });
+        let endText = this.add.bitmapText(width/2, height/2-30, "titleFont", "TEXT", 48).setOrigin(0.5, 0);
 
         if(gameWon){
             //If the game was won, do this
