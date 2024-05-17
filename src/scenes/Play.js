@@ -65,7 +65,7 @@ class Play extends Phaser.Scene {
 
 		//Health UI - two rectangles, on top left and top right, both red
 		this.playerHealthBar = this.add.rectangle(0, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
-		this.enemyHealthBar = this.add.rectangle(width-430, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
+		this.enemyHealthBar = this.add.rectangle(width - 390, 0, 400, 20, 0xFF0000).setOrigin(0, 0);
 
     	//enemy
    		this.LittleMac = new Enemy(this, width/2 + 400, 400, "Little Mac", 0, 3).setScale(.8)
@@ -336,7 +336,7 @@ class Play extends Phaser.Scene {
 			this.playerHealthBar.setSize(this.playerHealth * 4, 20);
 			this.enemyHealthBar.setSize(this.enemyHealth * 4, 20);
 			//move enemy health bar to accomodate for the new size
-			this.enemyHealthBar.x = width - this.enemyHealthBar.width - 30;
+			this.enemyHealthBar.x = width - this.enemyHealthBar.width;
 
 			//Dodging
 			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
