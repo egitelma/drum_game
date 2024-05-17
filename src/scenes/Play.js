@@ -242,6 +242,15 @@ class Play extends Phaser.Scene {
 							duration: 1000
 						}
 					}).play();
+					setTimeout(() => {
+						this.playerHealth -= 20
+						this.enemyHealth -= 20
+						this.bloodAlpha += .16
+						setTimeout(() => {
+							this.LittleMac.tint = '0xFFFFFF'
+						}, 200)
+						
+					}, 950)
 				}
 				else if (this.rocketCombo.matched) {
 					//Launch rocket punch
@@ -280,6 +289,14 @@ class Play extends Phaser.Scene {
 							duration: 1000
 						}
 					}).play();
+					setTimeout(() => {
+						this.hitBoxRight.setActive(true)
+						this.comboFlag = true
+						setTimeout(() => {
+							this.hitBoxRight.setActive(false)
+							this.punchFatigue = false
+						}, 200)
+					}, 950)
 				}
 				else if (this.gunComboRight.matched) {
 					//Shoot a gun (right hand)
@@ -299,6 +316,14 @@ class Play extends Phaser.Scene {
 							duration: 1000
 						}
 					}).play();
+					setTimeout(() => {
+						this.hitBoxLeft.setActive(true)
+						this.comboFlag = true
+						setTimeout(() => {
+							this.hitBoxLeft.setActive(false)
+							this.punchFatigue = false
+						}, 200)
+					}, 950)
 				}
 			}
         })
