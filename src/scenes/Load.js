@@ -65,6 +65,7 @@ class Load extends Phaser.Scene {
         this.load.audio("punchLand", "punch.mp3");
         this.load.audio("ough", "ough.mp3");
         this.load.audio("gun", "gun.mp3");
+        this.load.audio("grenade", "grenade.mp3")
         //and BGM - still royalty free
         this.load.audio("menuBGM", "menu_bgm.mp3");
         this.load.audio("mainBGM", "main_bgm.mp3");

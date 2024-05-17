@@ -125,6 +125,12 @@ class Play extends Phaser.Scene {
 			loop: false
 		});
 
+		this.grenade = this.sound.add("grenade", {
+			mute: false,
+			volume: 1,
+			loop: false
+		});
+
 		//add background track
 		this.bgm = this.sound.add("mainBGM", {
 			mute: false,
@@ -288,6 +294,7 @@ class Play extends Phaser.Scene {
 						}
 					}).play();
 					setTimeout(() => {
+						this.grenade.play()
 						this.playerHealth -= 10
 						this.enemyHealth -= 30
 						this.bloodAlpha += .08
@@ -317,6 +324,7 @@ class Play extends Phaser.Scene {
 						}
 					}).play();
 					setTimeout(() => {
+						this.grenade.play()
 						this.playerHealth -= 5
 						this.enemyHealth -= 40
 						this.LittleMac.tint = '0xFF0000'
@@ -414,67 +422,6 @@ class Play extends Phaser.Scene {
 			//move enemy health bar to accomodate for the new size
 			this.enemyHealthBar.x = width - this.enemyHealthBar.width;
 
-			//Dodging
-			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
-				//handle right dodge visual movement
-				//tween little mac & background
-				//barriers: 380 to prevent right-scootng, 900 to prevent left-scooting?
-				if(this.background.x > 380){
-					this.tweens.add({
-						targets: [this.LittleMac, this.background, this.timeRemainingText],
-						paused: true,
-						yoyo: false,
-						x: '-=130',
-						duration: 550
-					}).play();
-				}
-
-				//play sfx
-				this.drumSide.play();
-
-				//cooldown
-				this.inputLockedOut = true;
-                this.time.addEvent({
-                    delay: 1000, //a little extra time to be safe
-                    callback: () => {
-                        this.inputLockedOut = false;
-                    },
-                    loop: false
-                })
-				this.inputDodgeR.setVisible(true);
-			} else {
-				this.inputDodgeR.setVisible(false);
-      }
-			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Dodge
-				//handle left dodge visual movement
-				//tween little mac & background
-				//left barrier is 900
-				if(this.background.x < 900){
-					this.tweens.add({
-						targets: [this.LittleMac, this.background, this.timeRemainingText],
-						paused: true,
-						yoyo: false,
-						x: '+=130',
-						duration: 550
-					}).play();
-				}
-
-				//play sfx
-				this.drumSide.play();
-
-				//cooldown
-				this.inputLockedOut = true;
-                this.time.addEvent({
-                    delay: 1000, //a little extra time to be safe
-                    callback: () => {
-                        this.inputLockedOut = false;
-                    },
-                    loop: false
-                })
-				this.inputDodgeL.setVisible(true);
-			} else {
-				this.inputDodgeL.setVisible(false);
-			}
 			//Punching 
 			if (this.keyRIGHTPUNCH.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Punch
 				//play sfx
@@ -560,6 +507,68 @@ class Play extends Phaser.Scene {
 			}
             else {
 				this.inputPunchL.setVisible(false);
+			}
+
+			//Dodging
+			if (this.keyRIGHTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Right Dodge
+				//handle right dodge visual movement
+				//tween little mac & background
+				//barriers: 380 to prevent right-scootng, 900 to prevent left-scooting?
+				if(this.background.x > 380){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '-=130',
+						duration: 550
+					}).play();
+				}
+
+				//play sfx
+				this.drumSide.play();
+
+				//cooldown
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
+				this.inputDodgeR.setVisible(true);
+			} else {
+				this.inputDodgeR.setVisible(false);
+      }
+			if (this.keyLEFTDODGE.isDown && !this.inputLockedOut && !this.comboLockedOut) { //Player Left Dodge
+				//handle left dodge visual movement
+				//tween little mac & background
+				//left barrier is 900
+				if(this.background.x < 900){
+					this.tweens.add({
+						targets: [this.LittleMac, this.background, this.timeRemainingText],
+						paused: true,
+						yoyo: false,
+						x: '+=130',
+						duration: 550
+					}).play();
+				}
+
+				//play sfx
+				this.drumSide.play();
+
+				//cooldown
+				this.inputLockedOut = true;
+                this.time.addEvent({
+                    delay: 1000, //a little extra time to be safe
+                    callback: () => {
+                        this.inputLockedOut = false;
+                    },
+                    loop: false
+                })
+				this.inputDodgeL.setVisible(true);
+			} else {
+				this.inputDodgeL.setVisible(false);
 			}
 			
 			//Enemy AI
