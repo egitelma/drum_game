@@ -249,9 +249,10 @@ class Play extends Phaser.Scene {
 						}
 					}).play();
 					setTimeout(() => {
-						this.playerHealth -= 20
-						this.enemyHealth -= 20
-						this.bloodAlpha += .16
+						this.playerHealth -= 10
+						this.enemyHealth -= 30
+						this.bloodAlpha += .08
+						this.LittleMac.tint = '0xFF0000'
 						setTimeout(() => {
 							this.LittleMac.tint = '0xFFFFFF'
 						}, 200)
@@ -276,6 +277,15 @@ class Play extends Phaser.Scene {
 							duration: 1000
 						}
 					}).play();
+					setTimeout(() => {
+						this.playerHealth -= 5
+						this.enemyHealth -= 40
+						this.LittleMac.tint = '0xFF0000'
+						this.bloodAlpha += .04
+						setTimeout(() => {
+							this.LittleMac.tint = '0xFFFFFF'
+						}, 200)
+					}, 1000)
 				}
 				else if (this.gunComboLeft.matched) {
 					//Shoot a gun (left hand)
